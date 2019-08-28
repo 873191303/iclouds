@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.VdcView" table="iyun_vdc_view">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="vdcId">
+            <column name="vdcid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="objId">
+            <column name="objid" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="previous">
+            <column name="previous" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="sequence">
+            <column name="sequence" sql-type="smallint"/>
+        </property>
+        <property name="objName" type="string" formula="(SELECT items.option_name FROM iyun_vdc_items items WHERE items.id = objid)"/>
+        <property name="previousName" type="string" formula="(SELECT items.option_name FROM iyun_vdc_items items WHERE items.id = previous)"/>
+        <property name="objType" type="string" formula="(SELECT items.itemtype FROM iyun_vdc_items items WHERE items.id = objid)"/>
+        <property name="previousType" type="string" formula="(SELECT items.itemtype FROM iyun_vdc_items items WHERE items.id = previous)"/>
+        <property name="objUuid" type="string" formula="(SELECT items.uuid FROM iyun_vdc_items items WHERE items.id = objid)"/>
+        <property name="previousUuid" type="string" formula="(SELECT items.uuid FROM iyun_vdc_items items WHERE items.id = previous)"/>
+        <property name="status" type="string" formula="(SELECT items.status FROM iyun_vdc_items items WHERE items.id = objid)"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Class2Items" table="cmdb_asm_class2Items">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="itemId" type="string" >
+            <column name="itemId" length="36"/>
+        </property>
+        <property name="itemName" type="string">
+            <column name="itemName" length="500" />
+        </property>
+        <property name="resType" type="string" update="false">
+            <column name="resType" length="36" />
+        </property>
+        <property name="unum" type="integer">
+            <column name="unum" />
+        </property>
+        <property name="flag" type="string" >
+            <column name="flag" length="1"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="resTypeCode" type="string" formula="(select t.codeName from iyun_base_initcode t where t.id = resType)"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,1 @@
+ALTER TABLE public.iyun_nova_vm ADD manageip VARCHAR(36) NULL;

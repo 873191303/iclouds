@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.NetTemplater" table="iyun_spe_nettemplater" >
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="tenantId">
+            <column name="tenant_id" sql-type="varchar(255)"/>
+        </property>
+        <property name="vsId">
+            <column name="vsid" sql-type="bigint" not-null="true"/>
+        </property>
+        <property name="vsName">
+            <column name="vsname" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="deviceModel">
+            <column name="devicemodel" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="isKernelAccelerated">
+            <column name="iskernelaccelerated" sql-type="smallint" not-null="true"/>
+        </property>
+        <property name="mode">
+            <column name="mode" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="profileId">
+            <column name="profileid" sql-type="bigint"/>
+        </property>
+        <property name="profileName">
+            <column name="profilename" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp(6)"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp(6)"/>
+        </property>
+    </class>
+</hibernate-mapping>

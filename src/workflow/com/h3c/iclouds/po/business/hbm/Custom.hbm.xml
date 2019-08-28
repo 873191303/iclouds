@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.Custom" table="bus_cis_custom">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="cusName" type="string">
+            <column name="cusName" length="500"/>
+        </property>
+        <property name="lvls" type="string">
+            <column name="lvls" length="36"/>
+        </property>
+        <property name="custIntroduction" type="string">
+            <column name="custIntroduction"/>
+        </property>
+        <property name="manBusiness" type="string">
+            <column name="manBusiness" length="50"/>
+        </property>
+        <property name="address" type="string">
+            <column name="adress" length="50"/>
+        </property>
+        <property name="tel" type="string">
+            <column name="tel" length="50"/>
+        </property>
+        <property name="url" type="string">
+            <column name="url" length="50"/>
+        </property>
+        <property name="fax" type="string">
+            <column name="fax" length="50" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="turnover" type="double">
+            <column name="turnover" />
+        </property>
+        <property name="owner" type="string" update="false">
+            <column name="owner" length="36" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="GroupID" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="createdByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = CreatedBy)"/>
+        <property name="contactCount" type="integer" formula="(select count(1) from bus_cis_contact t where t.cusId = id)"/>
+        <property name="status" type="string">
+            <column name="status" length="1"/>
+        </property>
+        <set name="contactSet" table="bus_cis_contact" lazy="false" cascade="all" inverse="true">
+            <key column="cusId"></key><!-- 表字段 -->        
+            <one-to-many class="com.h3c.iclouds.po.business.Contact"/><!-- 关联的类 -->
+		</set>
+    </class>
+</hibernate-mapping>

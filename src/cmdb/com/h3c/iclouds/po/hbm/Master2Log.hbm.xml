@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Master2Log" table="cmdb_asm_master2log">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="assetId" type="string" update="false">
+            <column name="assetId" length="36"/>
+        </property>
+        <property name="chgCause" type="string">
+            <column name="chgCause" length="100"/>
+        </property>
+        <property name="fpropValue" type="string">
+            <column name="fpropValue" length="100"/>
+        </property>
+        <property name="apropValue" type="string">
+            <column name="apropValue" length="100"/>
+        </property>
+        <property name="chOwner" type="string">
+            <column name="chOwner" length="50"/>
+        </property>
+        <property name="chDate" type="timestamp">
+            <column name="chDate"  length="19"/>
+        </property>
+        <property name="chgId" type="string">
+            <column name="chgId" length="50"/>
+        </property>
+        <property name="flag" type="string">
+            <column name="flag" length="1"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Volume2Host" table="cmdb_storage_volume2host">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="volumeId" type="string">
+            <column name="volumeId" length="50"/>
+        </property>
+        <property name="type" type="string">
+            <column name="type" length="50"/>
+        </property>
+        <property name="hostId" type="string">
+            <column name="hostId" length="50"/>
+        </property>
+        <property name="targetIp" type="string">
+            <column name="targetIp" length="50"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+    </class>
+</hibernate-mapping>

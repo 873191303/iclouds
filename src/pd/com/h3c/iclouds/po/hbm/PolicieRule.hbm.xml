@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.PolicieRule" table="iyun_policie_rule">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="varchar(255)"/>
+        </property>
+        <property name="description">
+            <column name="description" sql-type="varchar(1024)" length="1024"/>
+        </property>
+        <property name="shared">
+            <column name="shared" sql-type="bool"/>
+        </property>
+        <property name="protocol">
+            <column name="protocol" sql-type="varchar(40)" length="40" />
+        </property>
+        <property name="action">
+            <column name="action" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="ipVersion">
+            <column name="ip_version"  sql-type="int"/>
+        </property>
+        <property name="sourceIp">
+            <column name="source_ip" sql-type="varchar(50)" length="50" />
+        </property>
+        <property name="sourcePortRangeMin">
+            <column name="source_port_range_min"  sql-type="int"/>
+        </property>
+        <property name="sourcePortRangeMax">
+            <column name="source_port_range_max"  sql-type="int"/>
+        </property>
+        <property name="destinationIp">
+            <column name="destination_ip" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="destinationPortRangeMin">
+            <column name="destination_port_range_min" sql-type="int"/>
+        </property>
+        <property name="destinationPortRangeMax">
+            <column name="destination_port_range_max"  sql-type="int"/>
+        </property>
+        <property name="enabled">
+            <column name="enabled" sql-type="bool"/>
+        </property>
+        <property name="policyId" update="false">
+            <column name="policyid" sql-type="int" length="50"/>
+        </property>
+        <property name="tenantId" update="false">
+            <column name="tenantid" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="position">
+            <column name="position" sql-type="varchar(50)" length="50" />
+        </property>
+        <property name="cloudosId" type="string">
+            <column name="cloudos_id" length="50" />
+        </property>
+        <property name="createdBy" update="false">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate" update="false">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

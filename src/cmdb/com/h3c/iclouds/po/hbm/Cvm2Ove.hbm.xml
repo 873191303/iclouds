@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Cvm2Ove" table="cmdb_cap_cvm2ovelflow">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="cvmName" type="string">
+            <column name="cvmName" length="100"/>
+        </property>
+        <property name="totalCpu" type="int">
+            <column name="totalCPU" length="8"/>
+        </property>
+        <property name="assignCpu" type="int">
+            <column name="assignCPU" length="8"/>
+        </property>
+        <property name="cpuUsage" type="float">
+            <column name="cpuUsage" length="8"/>
+        </property>
+        <property name="totalMem" type="int">
+            <column name="totalMEM" length="8"/>
+        </property>
+        <property name="assignMem" type="int">
+            <column name="assignMEM" length="8"/>
+        </property>
+        <property name="memUsage" type="float">
+            <column name="memUsage" length="8"/>
+        </property>
+        <property name="year" type="string">
+            <column name="year" length="4"/>
+        </property>
+        <property name="month" type="string">
+            <column name="month" length="2"/>
+        </property>
+        <property name="day" type="string">
+            <column name="day" length="2"/>
+        </property>
+        <property name="userId" type="string">
+            <column name="tenant" length="36"/>
+        </property>
+        <property name="date" type="timestamp">
+            <column name="syncDate"/>
+        </property>
+    </class>
+</hibernate-mapping>

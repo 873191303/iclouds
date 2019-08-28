@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.Prd2Templates" table="iyun_base_prd2templates">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="classId" type="string">
+            <column name="classId" length="36"/>
+        </property>
+        <property name="key" type="string">
+            <column name="key" length="36"/>
+        </property>
+        <property name="keyName" type="string">
+            <column name="keyName" length="100"/>
+        </property>
+        <property name="orderBy" type="integer">
+            <column name="orderBy" length="1000"/>
+        </property>
+        
+        <property name="validate" type="string">
+            <column name="validate" length="200"/>
+        </property>
+        <property name="dataType" type="string">
+            <column name="dataType" length="1"/>
+        </property>
+		<property name="isShow" type="string">
+            <column name="isShow" length="1"/>
+        </property>
+        <property name="isMust" type="string">
+            <column name="isMust" length="1"/>
+        </property>
+        <property name="units" type="string">
+            <column name="units" length="16"/>
+        </property>        
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.NovaFlavor" table="iyun_nova_flavor">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="vcpus">
+            <column name="vcpus" sql-type="int"/>
+        </property>
+        <property name="ram">
+            <column name="ram" sql-type="int"/>
+        </property>
+        <property name="disk">
+            <column name="disk" sql-type="int"/>
+        </property>
+        <property name="diskType">
+            <column name="disktype" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="swap">
+            <column name="swap" sql-type="int"/>
+        </property>
+        <property name="disabled">
+            <column name="disabled" sql-type="bool"/>
+        </property>
+        <property name="isPublic">
+            <column name="is_public" sql-type="bool"/>
+        </property>
+        <property name="deleted">
+            <column name="deleted" sql-type="varchar(32)" length="32"/>
+        </property>
+        <property name="deleteBy">
+            <column name="deleteby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="deleteDate">
+            <column name="deletedate" sql-type="timestamp" />
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

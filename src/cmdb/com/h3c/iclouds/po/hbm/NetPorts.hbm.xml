@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.NetPorts" table="cmdb_asm_netports">
+		<id name="id" type="string">
+			<column name="id" length="36" />
+			<generator class="uuid.hex" />
+		</id>
+		<property name="masterId" type="string" update="false">
+			<column name="masterId" length="50" />
+		</property>
+		<property name="seq" type="integer">
+			<column name="seq" />
+		</property>
+		<property name="mac" type="string">
+			<column name="mac" length="50" />
+		</property>
+		<property name="portType" type="string">
+			<column name="portType" length="50" />
+		</property>
+		<property name="ethType" type="string">
+			<column name="ethType" length="1" />
+		</property>
+		<property name="remark" type="string">
+			<column name="remark" length="600" />
+		</property>
+		<property name="groupId" type="string">
+			<column name="groupId" length="36" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		
+		<property name="accessTo" type="string" formula="(select distinct n.accessTo from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkTo" type="string" formula="(select distinct n.trunkTo from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="accessVlan" type="string" formula="(select distinct n.accessVlan from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkVlan" type="string" formula="(select distinct n.trunkVlan from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="accessSeq" type="string" formula="(select distinct n.accessSeq from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="accessMac" type="string" formula="(select distinct n.accessMac from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="accessName" type="string" formula="(select distinct n.accessName from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkSeq" type="string" formula="(select distinct n.trunkSeq from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkMac" type="string" formula="(select distinct n.trunkMac from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkName" type="string" formula="(select distinct n.trunkName from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="accessMasterId" type="string" formula="(select distinct n.accessMasterId from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="trunkMasterId" type="string" formula="(select distinct n.trunkMasterId from cmdb_asm_netport_link_view n where n.nid = id and (seq=n.accessseq or seq=n.trunkseq))"/>
+		<property name="assetName" type="string"
+				  formula="(select master.assetName from cmdb_asm_master master where master.id = masterId)"/>
+		<property name="serial" type="string"
+				  formula="(select master.serial from cmdb_asm_master master where master.id = masterId)"/>
+		<set name="trunkLink" lazy="true" cascade="delete" inverse="true">
+			<key column="trunkTo"></key>
+			<one-to-many class="com.h3c.iclouds.po.NetPortsLink" />
+		</set>
+		<set name="accessLink" lazy="true" cascade="delete" inverse="true">
+			<key column="accessTo"></key>
+			<one-to-many class="com.h3c.iclouds.po.NetPortsLink" />
+		</set>
+	</class>
+</hibernate-mapping>

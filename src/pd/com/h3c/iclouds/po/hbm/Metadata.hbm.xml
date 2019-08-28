@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Metadata" table="iyun_vm_metadata" >
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="instanceUuid">
+            <column name="instance_uuid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="key">
+            <column name="key" sql-type="varchar(255)"/>
+        </property>
+        <property name="value">
+            <column name="value" sql-type="varchar(255)"/>
+        </property>
+        <property name="deleted">
+            <column name="deleted" sql-type="varchar(32)" length="32"/>
+        </property>
+        <property name="deleteBy">
+            <column name="deleteby" sql-type="varchar(36)" length="36" />
+        </property>
+        <property name="deleteDate">
+            <column name="deletedate" sql-type="timestamp" />
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

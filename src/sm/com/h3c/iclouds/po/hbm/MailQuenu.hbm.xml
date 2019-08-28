@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.MailQuenu" table="iyun_base_emailquenu">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="mname" type="string">
+            <column name="mname" length="50"/>
+        </property>
+        <property name="mfrom" type="string">
+            <column name="mfrom" length="100" />
+        </property>
+        <property name="mto" type="string">
+            <column name="mto" length="100" />
+        </property>
+        <property name="mcc" type="string">
+            <column name="mcc" length="100" />
+        </property>
+        <property name="mbcc" type="string">
+            <column name="mbcc" length="100" />
+        </property>
+        <property name="mtopic" type="string">
+            <column name="mtopic" length="100" />
+        </property>
+        <property name="mcontent" type="string">
+            <column name="mcontent" length="1000" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupid" length="36" />
+        </property>
+        <property name="attachments" type="string">
+            <column name="attachments" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

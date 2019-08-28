@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.VNetports" table="cmdb_cloud_vnetports">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="vmId" type="string">
+            <column name="vmId" length="50"/>
+        </property>
+        <property name="seq" type="integer">
+            <column name="seq" length="16"/>
+        </property>
+        <property name="mac" type="string">
+            <column name="mac" length="50"/>
+        </property>
+        <property name="portType" type="string">
+            <column name="portType" length="50"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="600"/>
+        </property>
+        <property name="peth" type="string">
+            <column name="peth" length="36"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="assetName" type="string" formula="(SELECT mast.assetName from cmdb_asm_master mast WHERE mast.id =(SELECT item.assId FROM cmdb_server_cluster2items item WHERE item.id =(SELECT serv.hostId FROM cmdb_cloud_server2vm serv WHERE serv.id = vmId)))"/>
+        <property name="netMac" type="string" formula="(SELECT mast.mmac from cmdb_asm_master mast WHERE mast.id =(SELECT item.assId FROM cmdb_server_cluster2items item WHERE item.id =(SELECT serv.hostId FROM cmdb_cloud_server2vm serv WHERE serv.id = vmId)))"/>
+    </class>
+</hibernate-mapping>

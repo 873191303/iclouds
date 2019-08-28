@@ -1,0 +1,1 @@
+ALTER TABLE public.iyun_base_prdclass ADD type VARCHAR(100) NULL;

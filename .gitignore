@@ -1,0 +1,6 @@
+.idea/
+iclouds.iml
+WebContent/WEB-INF/classes/
+/.apt_generated/
+WebContent/opsplat/
+WebContent/console/

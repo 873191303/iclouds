@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+	xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+	typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+	targetNamespace="http://www.activiti.org/test">
+	<process id="ewo2" name="事件工单" isExecutable="true">
+		<startEvent id="ewo_startevent1" name="Start"></startEvent>
+		<sequenceFlow id="flow1" sourceRef="ewo_startevent1" targetRef="ewo_usertask1"></sequenceFlow>
+		<userTask id="ewo_usertask1" name="申请"></userTask>
+		<sequenceFlow id="flow2" sourceRef="ewo_usertask1" targetRef="ewo_usertask2"></sequenceFlow>
+		<userTask id="ewo_usertask2" name="一线处理" activiti:candidateGroups="ewo_task2">
+			<extensionElements>
+		        <activiti:formProperty id="requestParameter" name="Do you approve this request" type="enum" required="true">
+		          	<activiti:value id="approve" name="approve"></activiti:value>
+		          	<activiti:value id="reject" name="reject"></activiti:value>
+		        </activiti:formProperty>
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="flow3" sourceRef="ewo_usertask2" targetRef="exclusivegateway2"></sequenceFlow>
+		<exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+		<sequenceFlow id="flow4" sourceRef="exclusivegateway2" targetRef="ewo_usertask3">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'reject'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<userTask id="ewo_usertask3" name="二线处理" activiti:candidateGroups="ewo_task3">
+			<extensionElements>
+		        <activiti:formProperty id="requestParameter" name="Do you approve this request" type="enum" required="true">
+		          	<activiti:value id="approve" name="approve"></activiti:value>
+		          	<activiti:value id="reject" name="reject"></activiti:value>
+		        </activiti:formProperty>
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="flow5" sourceRef="ewo_usertask3" targetRef="exclusivegateway3"></sequenceFlow>
+		<exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+		<sequenceFlow id="flow6" sourceRef="exclusivegateway3" targetRef="ewo_usertask4">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'approve'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<userTask id="ewo_usertask4" name="用户验证">
+			<extensionElements>
+		        <activiti:formProperty id="requestParameter" name="Do you approve this request" type="enum" required="true">
+		          	<activiti:value id="approve" name="approve"></activiti:value>
+		          	<activiti:value id="reject" name="reject"></activiti:value>
+		        </activiti:formProperty>
+			</extensionElements>
+		</userTask>
+		<exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+		<sequenceFlow id="flow9" sourceRef="exclusivegateway4" targetRef="ewo_endevent1">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'approve'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<endEvent id="ewo_endevent1" name="End"></endEvent>
+		<sequenceFlow id="flow7" sourceRef="exclusivegateway3" targetRef="ewo_usertask3">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'reject'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow8" sourceRef="ewo_usertask4" targetRef="exclusivegateway4"></sequenceFlow>
+		<sequenceFlow id="flow10" sourceRef="exclusivegateway4" targetRef="ewo_usertask2">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'reject'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow11" sourceRef="exclusivegateway2" targetRef="ewo_usertask4">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${requestParameter == 'approve'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_ewo2">
+		<bpmndi:BPMNPlane bpmnElement="ewo2" id="BPMNPlane_ewo2">
+			<bpmndi:BPMNShape bpmnElement="ewo_startevent1"
+				id="BPMNShape_ewo_startevent1">
+				<omgdc:Bounds height="35.0" width="35.0" x="430.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="ewo_usertask1" id="BPMNShape_ewo_usertask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="395.0" y="160.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="ewo_usertask2" id="BPMNShape_ewo_usertask2">
+				<omgdc:Bounds height="55.0" width="105.0" x="395.0" y="250.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway2"
+				id="BPMNShape_exclusivegateway2">
+				<omgdc:Bounds height="40.0" width="40.0" x="427.0" y="340.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="ewo_usertask3" id="BPMNShape_ewo_usertask3">
+				<omgdc:Bounds height="55.0" width="105.0" x="395.0" y="410.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway3"
+				id="BPMNShape_exclusivegateway3">
+				<omgdc:Bounds height="40.0" width="40.0" x="427.0" y="500.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="ewo_usertask4" id="BPMNShape_ewo_usertask4">
+				<omgdc:Bounds height="55.0" width="105.0" x="395.0" y="570.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway4"
+				id="BPMNShape_exclusivegateway4">
+				<omgdc:Bounds height="40.0" width="40.0" x="427.0" y="660.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="ewo_endevent1" id="BPMNShape_ewo_endevent1">
+				<omgdc:Bounds height="35.0" width="35.0" x="430.0" y="730.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+				<omgdi:waypoint x="447.0" y="125.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="160.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+				<omgdi:waypoint x="447.0" y="215.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="250.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+				<omgdi:waypoint x="447.0" y="305.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="340.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+				<omgdi:waypoint x="447.0" y="380.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="410.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+				<omgdi:waypoint x="447.0" y="465.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="500.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+				<omgdi:waypoint x="447.0" y="540.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="570.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+				<omgdi:waypoint x="467.0" y="520.0"></omgdi:waypoint>
+				<omgdi:waypoint x="555.0" y="519.0"></omgdi:waypoint>
+				<omgdi:waypoint x="555.0" y="437.0"></omgdi:waypoint>
+				<omgdi:waypoint x="500.0" y="437.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+				<omgdi:waypoint x="447.0" y="625.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="660.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+				<omgdi:waypoint x="447.0" y="700.0"></omgdi:waypoint>
+				<omgdi:waypoint x="447.0" y="730.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+				<omgdi:waypoint x="427.0" y="680.0"></omgdi:waypoint>
+				<omgdi:waypoint x="341.0" y="679.0"></omgdi:waypoint>
+				<omgdi:waypoint x="341.0" y="278.0"></omgdi:waypoint>
+				<omgdi:waypoint x="395.0" y="277.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+				<omgdi:waypoint x="467.0" y="360.0"></omgdi:waypoint>
+				<omgdi:waypoint x="591.0" y="360.0"></omgdi:waypoint>
+				<omgdi:waypoint x="591.0" y="597.0"></omgdi:waypoint>
+				<omgdi:waypoint x="500.0" y="597.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

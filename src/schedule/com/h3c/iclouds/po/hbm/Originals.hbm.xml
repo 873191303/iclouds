@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Originals" table="iyun_netflow_originals">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="collectTime" type="timestamp">
+            <column name="collectTime" />
+        </property>
+        <property name="vassetId" type="string" >
+            <column name="vassetId"/>
+        </property>
+        <property name="value" type="long" >
+            <column name="value"/>
+        </property>
+        <property name="type" type="string">
+            <column name="type" />
+        </property>
+        <property name="uuid" type="string">
+            <column name="uuid" />
+        </property>
+        <property name="tenantId" type="string">
+            <column name="tenantId" />
+        </property>
+        <property name="currentTotal" type="long">
+            <column name="currenttotal" />
+        </property>
+        <property name="createdDate" type="timestamp" >
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

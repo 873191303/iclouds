@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.AppViews" table="cmdb_app_views">
+		<id name="id">
+			<column name="id" sql-type="varchar(36)" length="36" />
+			<generator class="assigned" />
+		</id>
+		<property name="name">
+			<column name="name" sql-type="varchar(20)" length="20" />
+		</property>
+		<property name="description">
+			<column name="description" sql-type="varchar(250)" length="250" not-null="true" />
+		</property>
+		<property name="projectId">
+			<column name="projectId" sql-type="varchar(64)" length="64" />
+		</property>
+		<property name="version">
+			<column name="version" sql-type="varchar(36)" />
+		</property>
+		<property name="sessionId">
+			<column name="sessionId" sql-type="varchar(64)" />
+		</property>
+		<property name="userId" type="string">
+			<column name="userId" />
+		</property>
+		<property name="lock" type="boolean">
+			<column name="lock" />
+		</property>
+		<property name="sequence" type="int">
+			<column name="sequence" />
+		</property>
+		<property name="createdBy">
+			<column name="createdby" sql-type="varchar(36)" length="36" />
+		</property>
+		<property name="createdDate" update="false">
+			<column name="createddate" sql-type="timestamp" />
+		</property>
+		<property name="updatedBy">
+			<column name="updatedby" sql-type="varchar(36)" length="36" />
+		</property>
+		<property name="updatedDate">
+			<column name="updateddate" sql-type="timestamp" />
+		</property>
+	</class>
+</hibernate-mapping>

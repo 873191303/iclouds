@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.QuotaUsed" table="iyun_quota_tenant_used">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <!-- XML格式的version属性映射必须立即放在标示符属性映射之后 -->  
+    	
+        <property name="tenantId" type="string">
+            <column name="tenant_id" length="64" />
+        </property>
+        <property name="classId" type="string">
+            <column name="class_id" length="36"/>
+        </property>
+        <property name="classCode" type="string">
+            <column name="class_code" length="64"/>
+        </property>
+        <property name="quotaUsed" type="int">
+            <column name="quota_used" length="4"/>
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="created_at" length="19"/>
+        </property>
+        <property name="updatedAt" type="timestamp">
+            <column name="updated_at" length="19"/>
+        </property>
+        <property name="deletedAt" type="timestamp">
+            <column name="delete_at" length="19"/>
+        </property>
+        <property name="deleted" type="int">
+            <column name="deleted" length="4"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.IpAvailabilityRange" table="iyun_subnet_ipavailabilityrange">
+		<composite-id >
+			<key-property name="allocationPoolId" column="allocation_pool_id" type="string"/>
+			<key-property name="firstIp" column="first_ip" type="string"/>
+			<key-property name="lastIp" column="last_ip" type="string"/>
+		</composite-id>
+	</class>
+</hibernate-mapping>

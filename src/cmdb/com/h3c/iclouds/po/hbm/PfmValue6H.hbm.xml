@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.PfmValue6H" table="ipm_pfm_measurement_6h">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="uuid">
+            <column name="uuid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="itemId">
+            <column name="item" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="resType">
+            <column name="restype" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="keyValue">
+            <column name="keyvalue" sql-type="FLOAT4"/>
+        </property>
+        <property name="maxValue">
+            <column name="maxvalue" sql-type="FLOAT4"/>
+        </property>
+        <property name="minValue">
+            <column name="minvalue" sql-type="FLOAT4"/>
+        </property>
+        <property name="collectTime" type="timestamp">
+            <column name="collecttime" length="19"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+    </class>
+</hibernate-mapping>

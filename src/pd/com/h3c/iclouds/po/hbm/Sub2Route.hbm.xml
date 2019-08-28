@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Sub2Route" table="iyun_vdc_subnet2route">
+        <composite-id >
+            <key-property name="nextHop" column="nexthop" type="string"/>
+            <key-property name="destination" column="destination" type="string"/>
+            <key-property name="subnetId" column="subnet_id" type="string"/>
+        </composite-id>
+    </class>
+</hibernate-mapping>

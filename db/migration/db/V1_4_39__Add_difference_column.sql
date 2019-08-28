@@ -1,0 +1,1 @@
+ALTER TABLE auto_sync_differences ADD projectName varchar(50);

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.Pool2HealthMonitor" table="iyun_vlb_pool2healthmonitors">
+		<composite-id >
+			<key-property name="hmonitorId" column="hmonitorid" type="string"/>
+			<key-property name="poolId" column="poolid" type="string"/>
+		</composite-id>
+		<property name="status" type="string">
+			<column name="status" length="16" />
+		</property>
+		<property name="statusDescription" type="string">
+			<column name="status_descrition" length="255" />
+		</property>
+	</class>
+</hibernate-mapping>

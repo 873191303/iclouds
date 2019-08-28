@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.NovaVmView" table="nova_vm_view">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" />
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="uuid">
+            <column name="uuid" sql-type="varchar(36)" />
+        </property>
+        <property name="vmstate">
+            <column name="vmstate" sql-type="varchar(255)" />
+        </property>
+        <property name="powerstate">
+            <column name="powerstate" sql-type="integer" />
+        </property>
+        <property name="hostname">
+            <column name="hostname" sql-type="varchar(255)" />
+        </property>
+        <property name="createdate">
+            <column name="createdate" sql-type="timestamp(6)" />
+        </property>
+        <property name="updatedDate">
+            <column name="updatedate" sql-type="timestamp(6)" />
+        </property>
+        <property name="userId">
+            <column name="userid" sql-type="varchar(36)" />
+        </property>
+        <property name="manageIp">
+            <column name="manageip" sql-type="varchar(36)" />
+        </property>
+        <property name="projectId">
+            <column name="projectid" sql-type="varchar(64)" />
+        </property>
+        <property name="ipAddress">
+            <column name="ipaddress" sql-type="text" />
+        </property>
+        <property name="name">
+            <column name="name" sql-type="text" />
+        </property>
+        <property name="cidr">
+            <column name="cidr" sql-type="text" />
+        </property>
+        <property name="projectname">
+            <column name="projectname" sql-type="varchar(64)" />
+        </property>
+        <property name="owner">
+            <column name="owner" sql-type="varchar(100)" />
+        </property>
+        <property name="publicIp">
+            <column name="ip_address" sql-type="text" />
+        </property>
+        <property name="monitorId">
+            <column name="monitorid" sql-type="varchar(100)" />
+        </property>
+    </class>
+</hibernate-mapping>

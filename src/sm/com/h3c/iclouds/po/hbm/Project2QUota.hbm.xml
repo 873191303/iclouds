@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Project2Quota" table="iyun_quota_tenant">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="tenantId" type="string">
+            <column name="tenant_id" length="64" />
+        </property>
+        <property name="classId" type="string">
+            <column name="class_id" length="36"/>
+        </property>
+        <property name="classCode" type="string">
+            <column name="class_code" length="64"/>
+        </property>
+        <property name="hardLimit" type="int">
+            <column name="hard_limit" length="4"/>
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="created_at" length="19"/>
+        </property>
+        <property name="updatedAt" type="timestamp">
+            <column name="updated_at" length="19"/>
+        </property>
+        <property name="deletedAt" type="timestamp">
+            <column name="deleted_at" length="19"/>
+        </property>
+        <property name="deleted" type="int">
+            <column name="deleted" length="4"/>
+        </property>
+    </class>
+</hibernate-mapping>

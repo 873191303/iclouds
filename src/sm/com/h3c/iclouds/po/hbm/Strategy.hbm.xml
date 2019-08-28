@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Strategy" table="iyun_vm_strategy">
+        <id name="id" type="int">
+            <column name="id" length="32" />
+<!--             <generator class="uuid.hex" /> -->
+        </id>
+        <property name="day" type="string">
+            <column name="day" length="255"/>
+        </property>
+        <property name="count" type="string">
+            <column name="count" length="25" />
+        </property>
+        <property name="time" type="timestamp">
+            <column name="time" length="6"/>
+        </property>
+        <property name="other" type="string">
+            <column name="other" length="255"/>
+        </property>
+        <property name="col1" type="string">
+            <column name="col1" length="255"/>
+        </property>
+        <property name="col2" type="string">
+            <column name="col2" length="255"/>
+        </property>
+        <property name="type" type="string">
+            <column name="type" length="25" />
+        </property>
+    </class>
+</hibernate-mapping>

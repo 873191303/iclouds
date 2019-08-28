@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.business.Bill" table="iyun_instance_bilings">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="measureId">
+            <column name="measureid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="instanceId">
+            <column name="instanceid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="myear">
+            <column name="myear" sql-type="int" />
+        </property>
+        <property name="mmonth">
+            <column name="mmonth" sql-type="int" />
+        </property>
+        <property name="mday">
+            <column name="mday" sql-type="int" />
+        </property>
+        <property name="num">
+            <column name="num" sql-type="bigint" />
+        </property>
+        <property name="amount">
+            <column name="amount" sql-type="numeric(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="billDate">
+            <column name="bilingDate" sql-type="timestamp"/>
+        </property>
+        <property name="billType">
+            <column name="bilingType" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <property name="classId" type="string"
+                  formula="(SELECT u.classid FROM iyun_measure_instaces u WHERE u.id=instanceid)"/>
+        <property name="instanceType" type="string"
+                  formula="(SELECT c.className FROM iyun_base_prdClass c WHERE c.id = (SELECT u.classid FROM iyun_measure_instaces u WHERE u.id=instanceid))"/>
+        <property name="instanceName" type="string"
+                  formula="(SELECT u.name FROM iyun_measure_instaces u WHERE u.id=instanceid)"/>
+        <property name="userId" formula="(SELECT mea.userid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid)"/>
+        <property name="tenantId" formula="(SELECT mea.tenantid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid)"/>
+        <property name="userName"
+                  formula="(SELECT u.loginname FROM iyun_sm_user u WHERE u.id=(SELECT mea.userid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="projectName"
+                  formula="(SELECT u.name FROM iyun_keystone_project u WHERE u.id=(SELECT mea.tenantid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="billTime"
+                  formula="(SELECT to_char(bill.bilingDate, 'yyyy-mm-dd hh24:mi:ss') FROM iyun_instance_bilings bill WHERE bill.id=id)"/>
+        <property name="beginDate"
+                  formula="(SELECT mea.begdate FROM iyun_instance_measuredetail mea WHERE mea.id = measureid)"/>
+        <property name="endDate"
+                  formula="(SELECT mea.enddate FROM iyun_instance_measuredetail mea WHERE mea.id = measureid)"/>
+        <property name="lastBillDate">
+            <formula>(
+                <![CDATA[
+                    SELECT bill.bilingdate FROM iyun_instance_bilings bill WHERE bill.measureid = measureid
+                        AND bill.bilingdate < bilingDate ORDER BY bill.bilingdate DESC LIMIT 1
+                ]]>)
+            </formula>
+        </property>
+        <property name="unit"
+                  formula="(SELECT u.unit FROM iyun_product_listPrice2imag u WHERE u.id=(SELECT mea.specid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="step"
+                  formula="(SELECT u.step FROM iyun_product_listPrice2imag u WHERE u.id=(SELECT mea.specid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="price"
+                  formula="(SELECT u.listprice FROM iyun_product_listPrice2imag u WHERE u.id=(SELECT mea.specid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="stepPrice"
+                  formula="(SELECT u.stepprice FROM iyun_product_listPrice2imag u WHERE u.id=(SELECT mea.specid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+        <property name="measureType"
+                  formula="(SELECT u.measuretype FROM iyun_product_listPrice2imag u WHERE u.id=(SELECT mea.specid FROM iyun_instance_measuredetail mea WHERE mea.id = measureid))"/>
+    </class>
+</hibernate-mapping>

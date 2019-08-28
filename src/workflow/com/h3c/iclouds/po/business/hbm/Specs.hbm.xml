@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.business.Specs" table="iyun_measure_specs" >
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="classId">
+            <column name="classid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="azoneId">
+            <column name="azoneid" sql-type="varchar(128)" length="128"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="spec">
+            <column name="spec" sql-type="text"/>
+        </property>
+        <property name="minValue">
+            <column name="minValue" sql-type="int"/>
+        </property>
+        <property name="maxValue">
+            <column name="maxValue" sql-type="int"/>
+        </property>
+        <property name="defaultValue">
+            <column name="default" sql-type="int"/>
+        </property>
+        <property name="unit">
+            <column name="unit" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="listPrice">
+            <column name="listprice" sql-type="numeric(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="step">
+            <column name="step" sql-type="int"/>
+        </property>
+        <property name="stepPrice">
+            <column name="stepprice" sql-type="numeric(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="disCount">
+            <column name="discount" sql-type="numeric(10,2)" precision="10" scale="2" />
+        </property>
+        <property name="flavorId">
+            <column name="flavorid" sql-type="varchar(36)" length="36" />
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

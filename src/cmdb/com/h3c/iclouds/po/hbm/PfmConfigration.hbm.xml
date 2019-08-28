@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.PfmConfigration" table="ipm_pfm_configuration">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="param">
+            <column name="param" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="paramValue">
+            <column name="paramvalue" sql-type="FLOAT4"/>
+        </property>
+    </class>
+</hibernate-mapping>

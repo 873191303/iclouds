@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Storage2Ove" table="cmdb_cap_storage2ovelflow">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="name" type="string">
+            <column name="sName" length="100"/>
+        </property>
+        <property name="type" type="string">
+            <column name="sType" length="36"/>
+        </property>
+        <property name="totalCapa" type="float">
+            <column name="totalsize" length="53"/>
+        </property>
+        <property name="usedCapa" type="float">
+            <column name="usedsize" length="53"/>
+        </property>
+        <property name="allocationCapa" type="float">
+            <column name="allocation" length="53"/>
+        </property>
+        <property name="freeCapa" type="float">
+            <column name="remainder" length="53"/>
+        </property>
+        <property name="capaUsage" type="float">
+            <column name="usage" length="53"/>
+        </property>
+        <property name="capaOverflow" type="float">
+            <column name="overflow" length="53"/>
+        </property>
+        <property name="year" type="string">
+            <column name="year" length="4"/>
+        </property>
+        <property name="month" type="string">
+            <column name="month" length="2"/>
+        </property>
+        <property name="day" type="string">
+            <column name="day" length="2"/>
+        </property>
+        <property name="date" type="timestamp">
+            <column name="syncDate"/>
+        </property>
+        <property name="hpId" type="string">
+            <column name="hpId" length="36"/>
+        </property>
+        <property name="belongId" type="string">
+            <column name="belongId" length="36"/>
+        </property>
+    </class>
+</hibernate-mapping>

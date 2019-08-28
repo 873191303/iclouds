@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.AppItems" table="cmdb_app_items">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="assigned" />
+        </id>
+        <property name="uuid">
+            <column name="uuid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="option">
+            <column name="option" sql-type="text"/>
+        </property>
+        <property name="itemtype">
+            <column name="itemtype" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="string"/>
+        </property>
+        <property name="viewId"
+                  formula="(SELECT rela.viewid FROM cmdb_app_relations rela WHERE rela.appid = id LIMIT 1)"/>
+    </class>
+</hibernate-mapping>

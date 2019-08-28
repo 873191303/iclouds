@@ -1,0 +1,1 @@
+ALTER TABLE public.iyun_sm_operatelogs ALTER COLUMN result TYPE VARCHAR(128) USING result::VARCHAR(128);

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.VmExtra" table="iyun_vm_extra">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="sshKey">
+            <column name="sshkey" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="osUser">
+            <column name="os_user" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="osPasswd">
+            <column name="os_passwd" sql-type="varchar(50)" length="50"/>
+        </property>
+    </class>
+</hibernate-mapping>

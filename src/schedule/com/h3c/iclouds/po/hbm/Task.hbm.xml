@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Task" table="iyun_base_tasks">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="busId" type="string">
+            <column name="busId" length="36"/>
+        </property>
+        <property name="input" type="string" >
+            <column name="input"/>
+        </property>
+        <property name="busType" type="string" >
+            <column name="busType" length="100" />
+        </property>
+        <property name="pushTime" type="timestamp">
+            <column name="pushTime" />
+        </property>
+        <property name="stackTime" type="timestamp">
+            <column name="stackTime" />
+        </property>
+        <property name="finishTime" type="timestamp">
+            <column name="finishTime" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="1"/>
+        </property>
+        <property name="projectId" type="string">
+            <column name="projectId" length="64"/>
+        </property>
+        <property name="stackIp" type="string">
+            <column name="stackIp" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

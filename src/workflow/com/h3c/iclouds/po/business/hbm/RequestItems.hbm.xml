@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.RequestItems" table="bus_req_items">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="reqId" type="string" insert="false" update="false">
+            <column name="reqId" length="36"/>
+        </property>
+        <property name="classId" type="string">
+            <column name="classId" length="36"/>
+        </property>
+        <property name="reqType" type="string" update="false">
+            <column name="reqType" length="36"/>
+        </property>
+        <property name="ajson" type="string">
+            <column name="ajson" length="1000"/>
+        </property>
+        <property name="oitemId" type="string" update="false">
+            <column name="oitemId" length="36" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="1"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupID" length="50" />
+        </property>
+        <property name="nums" type="integer">
+            <column name="nums" />
+        </property>
+        <property name="reqTime" type="timestamp">
+            <column name="reqTime" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="50"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="seq" type="integer">
+            <column name="seq" />
+        </property>
+        
+        
+        <property name="onums" type="integer" formula="(select t.nums from bus_req_items t where t.id = oitemId)"/>
+        <property name="oajson" type="string" formula="(select t.ajson from bus_req_items t where t.id = oitemId)"/>
+        
+        <many-to-one name="master" class="com.h3c.iclouds.po.business.RequestMaster" fetch="select">
+        	<column name="reqId"></column>
+		</many-to-one>
+    </class>
+</hibernate-mapping>

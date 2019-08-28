@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.UserGroup" table="ipm_pft_usrgrp" >
+        <id name="userGroupId">
+            <column name="usrgrpid" sql-type="bigint"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="varchar(64)" length="64"/>
+        </property>
+        <property name="guiAccess">
+            <column name="gui_access" sql-type="integer"/>
+        </property>
+        <property name="usersStatus">
+            <column name="users_status" sql-type="integer"/>
+        </property>
+        <property name="debugMode">
+            <column name="debug_mode" sql-type="integer"/>
+        </property>
+        <property name="tenantId">
+            <column name="tenantid" sql-type="varchar(36)" length="36"/>
+        </property>
+    </class>
+</hibernate-mapping>

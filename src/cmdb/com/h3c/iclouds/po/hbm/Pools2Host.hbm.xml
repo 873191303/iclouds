@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Pools2Host" table="cmdb_server_pools2host">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="poolName" type="string">
+            <column name="poolName" length="100"/>
+        </property>
+        <property name="belongCas" type="string">
+            <column name="belongcas" length="36"/>
+        </property>
+        <property name="casId" type="string">
+            <column name="casid" length="36"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="clusters" type="integer" formula="(SELECT count(*) FROM cmdb_server_clusters c WHERE c.phostId = id)"/>
+        <property name="hosts" type="integer"
+                  formula="(SELECT count(*) from cmdb_cap_server2ovelflow host where host.poolId = id)"/>
+        <property name="vms" type="integer"
+                  formula="(SELECT sum(host.vms) FROM cmdb_cap_server2ovelflow host WHERE host.poolId = id)"/>
+        <property name="cpus" type="integer"
+                  formula="(SELECT sum(host.cpus) FROM cmdb_cap_server2ovelflow host WHERE host.poolId = id)"/>
+        <property name="memorys" type="integer" formula="(SELECT sum(host.ram) FROM cmdb_cap_server2ovelflow host WHERE host.poolId = id)"/>
+        <property name="assignMem" type="integer"
+                  formula="(select sum(vm.memory) from cmdb_cloud_server2vm vm where vm.hostid in (select ove.id from cmdb_cap_server2ovelflow ove where ove.poolid = id))"/>
+        <property name="memUsage" type="double"
+                  formula="((select sum(vm.memory) from cmdb_cloud_server2vm vm where vm.hostid in (select ove.id from cmdb_cap_server2ovelflow ove where ove.poolid = id))*100.0/(SELECT sum(host.ram) FROM cmdb_cap_server2ovelflow host WHERE host.poolid = id))"/>
+        <property name="assignCpu" type="integer"
+                  formula="(select sum(vm.cpu) from cmdb_cloud_server2vm vm where vm.hostid in (select ove.id from cmdb_cap_server2ovelflow ove where ove.poolid = id))"/>
+        <property name="cpuUsage" type="double"
+                  formula="((select sum(vm.cpu) from cmdb_cloud_server2vm vm where vm.hostid in (select ove.id from cmdb_cap_server2ovelflow ove where ove.poolid = id))*100.0/(SELECT sum(host.cpus) FROM cmdb_cap_server2ovelflow host WHERE host.poolid = id))"/>
+    </class>
+</hibernate-mapping>

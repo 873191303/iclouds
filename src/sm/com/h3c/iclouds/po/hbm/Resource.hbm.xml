@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Resource" table="iyun_sm_resources">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="resName" type="string">
+            <column name="resName" length="100"/>
+        </property>
+        <property name="modeName" type="string">
+            <column name="modeName" length="100" />
+        </property>
+        <property name="sysType" type="string">
+            <column name="sysType" length="100"/>
+        </property>
+        <property name="authType" type="string">
+            <column name="authType" length="100"/>
+        </property>
+        <property name="funType" type="string">
+            <column name="funType" length="100"/>
+        </property>
+        <property name="resPath" type="string">
+            <column name="resPath" length="100"/>
+        </property>
+        <property name="parentId" type="string" update="false">
+            <column name="parentId" length="36"/>
+        </property>
+        <property name="depth" type="integer" update="false">
+            <column name="depth"/>
+        </property>
+        <property name="defaultRoleId" type="string">
+            <column name="defaultRoleId" length="36"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="50"/>
+        </property>
+        <property name="itemSeq" type="integer">
+            <column name="itemSeq" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="createdByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = CreatedBy)"/>
+        <property name="updatedByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = UpdatedBy)"/>
+        <property name="parentName" type="string" formula="(select t.resName from iyun_sm_resources t where t.id = parentId)"/>
+        <set name="resToRoleSet" table="iyun_sm_role2Res" lazy="true" cascade="delete" inverse="true">
+            <key column="resId"></key><!-- 表字段 -->        
+            <one-to-many class="com.h3c.iclouds.po.Role2Res"/><!-- 关联的类 -->
+		</set>
+    </class>
+</hibernate-mapping>

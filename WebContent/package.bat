@@ -1,0 +1,1 @@
+"D:\Program Files\Java\jdk1.8.0_73\bin\jar.exe" cvf D:\iclouds\myweb\iclouds.war *

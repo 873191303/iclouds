@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.ExtColumns" table="cmdb_asm_extColumns">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="assType" type="string" update="false">
+            <column name="assType" length="36"/>
+        </property>
+        <property name="xcName" type="string">
+            <column name="xcName" length="36" />
+        </property>
+        <property name="xcType" type="string" >
+            <column name="xcType" length="36" />
+        </property>
+        <property name="xcLength" type="integer">
+            <column name="xcLength" />
+        </property>
+        <property name="defaultValue" type="string" >
+            <column name="defaultValue" length="36"/>
+        </property>
+        <property name="seq" type="integer" >
+            <column name="seq" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="assTypeCode" type="string" formula="(select t.codeName from iyun_base_initcode t where t.id = assType)"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.StorageGroups" table="cmdb_storagedevice_groups">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="50"/>
+        </property>
+        <property name="manager" type="string">
+            <column name="manager" length="50"/>
+        </property>
+        <property name="status" type="int">
+            <column name="status" length="16"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="100"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="clusters" type="integer" formula="(SELECT count(clus.*) FROM cmdb_storagedevice_clusters clus WHERE clus.gid = id)"/>
+        <property name="volums" type="integer" formula="(SELECT count(volu.*) FROM cmdb_storagedevice_volums volu WHERE volu.sid IN (SELECT clus.id FROM cmdb_storagedevice_clusters clus WHERE clus.gid = id))"/>
+        <property name="managers" type="integer" formula="(SELECT count(mana.*) FROM cmdb_storage_manage mana WHERE mana.gid = id)"/>
+    </class>
+</hibernate-mapping>

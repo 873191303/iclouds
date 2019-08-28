@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.PftUser" table="ipm_pft_users" >
+        <id name="userId">
+            <column name="userid" sql-type="bigint"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="alias">
+            <column name="alias" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="surName">
+            <column name="surname" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="passwd">
+            <column name="passwd" sql-type="char(32)" length="32"/>
+        </property>
+        <property name="url">
+            <column name="url" sql-type="varchar(255)"/>
+        </property>
+        <property name="autoLogin">
+            <column name="autologin" sql-type="integer"/>
+        </property>
+        <property name="autoLogout">
+            <column name="autologout" sql-type="integer"/>
+        </property>
+        <property name="lang">
+            <column name="lang" sql-type="varchar(5)" length="5"/>
+        </property>
+        <property name="refresh">
+            <column name="refresh" sql-type="integer"/>
+        </property>
+        <property name="type">
+            <column name="type" sql-type="integer"/>
+        </property>
+        <property name="theme">
+            <column name="theme" sql-type="varchar(128)" length="128"/>
+        </property>
+        <property name="attemptFailed">
+            <column name="attempt_failed" sql-type="integer"/>
+        </property>
+        <property name="attemptIp">
+            <column name="attempt_ip" sql-type="varchar(39)" length="39"/>
+        </property>
+        <property name="attemptClock">
+            <column name="attempt_clock" sql-type="integer"/>
+        </property>
+        <property name="rowsPerPage">
+            <column name="rows_per_page" sql-type="integer"/>
+        </property>
+    </class>
+</hibernate-mapping>

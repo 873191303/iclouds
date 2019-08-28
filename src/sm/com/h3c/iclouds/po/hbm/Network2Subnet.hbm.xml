@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Network2Subnet" table="iyun_quota_tenant_subnet">
+       <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="assigned" />
+        </id>
+        <property name="networkId" type="string">
+            <column name="network_id" length="36"/>
+        </property>
+         <property name="startIp" type="string">
+            <column name="start_ip" length="36"  />
+        </property>
+         <property name="endIp" type="string">
+            <column name="end_ip" length="36"  />
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="created_at"   />
+        </property>
+         <property name="updatedAt" type="timestamp">
+            <column name="updated_at"  />
+        </property>
+         <property name="deletedAt" type="timestamp">
+            <column name="deleted_at"  />
+        </property>
+         <property name="deleted" type="integer">
+            <column name="deleted"  />
+        </property>
+         
+    </class>
+</hibernate-mapping>

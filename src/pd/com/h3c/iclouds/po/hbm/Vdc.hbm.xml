@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Vdc" table="iyun_base_vdc">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="description">
+            <column name="description" sql-type="varchar(250)" length="250"/>
+        </property>
+        <property name="sequence">
+            <column name="sequence" sql-type="smallint"/>
+        </property>
+        <property name="vdcType" update="false">
+            <column name="vdctype" sql-type="varchar(64)" length="64"/>
+        </property>
+        <property name="projectId">
+            <column name="projectid" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="userId">
+            <column name="userid" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="sessionId">
+            <column name="sessionid" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="version">
+            <column name="version" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="lock">
+            <column name="lock" sql-type="boolean"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <property name="uuid" type="string" formula="(SELECT item.uuid FROM iyun_vdc_items item WHERE item.id = id)"/>
+    </class>
+</hibernate-mapping>

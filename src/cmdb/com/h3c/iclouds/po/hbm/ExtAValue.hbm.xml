@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.ExtAValue" table="cmdb_asm_extavalue">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="assetID" type="string">
+        	<column name="assetid" length="36"/>
+        </property>
+        <property name="extID" type="string">
+        	<column name="extid" length="36" />
+        </property>
+        <property name="extValue" type="string">
+        	<column name="extvalue" length="1000" />
+        </property>
+        <property name="assetName" type="string" formula="(select t.assetName from cmdb_asm_master t where t.id=assetID)" />
+        <property name="serial" type="string" formula="(select t.Serial from cmdb_asm_master t where t.id=assetID)"/>
+        <property name="extName" type="string" formula="(select t.xCName from cmdb_asm_extColumns t where t.id = extID)" />
+        <property name="groupId" type="string">
+            <column name="groupid" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdby" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createddate" length="6" />
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="updatedby" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updateddate" length="6" />
+        </property>
+    </class>
+</hibernate-mapping>

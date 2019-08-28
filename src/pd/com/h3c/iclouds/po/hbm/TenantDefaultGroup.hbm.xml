@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.TenantDefaultGroup" table="iyun_tenant_defaultsgroup">
+		<id name="tenantId" type="string">
+			<column name="tenant_id" length="50"/>
+			<generator class="assigned"/>
+		</id>
+		<property name="securityGroupId" type="string">
+			<column name="security_group_od" length="36" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+	</class>
+</hibernate-mapping>

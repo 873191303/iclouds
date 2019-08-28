@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.VolumeFlavor" table="iyun_storage_flavor">
+		<id name="uuid" type="string">
+			<column name="uuid" length="32" />
+			<generator class="uuid.hex" />
+		</id>
+		<property name="name" type="string">
+			<column name="name" length="100" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="100" />
+		</property>
+		<property name="size" type="int">
+			<column name="size" />
+		</property>
+		<property name="volumeType" type="string">
+			<column name="volumeType" length="50" />
+		</property>
+		<property name="deleted" type="string">
+			<column name="deleted" length="50" />
+		</property>
+		<property name="deleteBy" type="string">
+			<column name="deleteBy" length="50" />
+		</property>
+		<property name="deleteDate" type="timestamp" update="false">
+			<column name="deleteDate" length="19" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+	</class>
+</hibernate-mapping>

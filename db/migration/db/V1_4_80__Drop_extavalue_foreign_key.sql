@@ -1,0 +1,1 @@
+ALTER TABLE public.cmdb_asm_extavalue DROP CONSTRAINT cmdb_asm_extavalue_id_fkey;

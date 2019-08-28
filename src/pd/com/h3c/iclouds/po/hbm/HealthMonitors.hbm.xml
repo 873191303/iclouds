@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.HealthMonitor" table="iyun_vlb_healthMonitors">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="type" type="string" update="false">
+			<column name="type" length="255" />
+		</property>
+		<property name="delay" type="int">
+			<column name="delay" length="4" />
+		</property>
+		<property name="timeout" type="int">
+			<column name="timeout" length="4" />
+		</property>
+		<property name="maxRetries" type="int">
+			<column name="max_retries" length="4" />
+		</property>
+		<property name="httpMethod" type="string">
+			<column name="http_method" length="16" />
+		</property>
+		<property name="urlPath" type="string">
+			<column name="url_path" length="255" />
+		</property>
+		<property name="expectedCodes" type="string">
+			<column name="expected_codes" length="64" />
+		</property>
+		<property name="adminStateUp" type="boolean">
+			<column name="admin_state_up"/>
+		</property>
+		<property name="tenantId" type="string" update="false">
+			<column name="tenant_id" length="50" />
+		</property>
+		<property name="lbId" type="string" update="false">
+			<column name="lbid" length="36" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="lbCloudosId" type="string" formula="(SELECT lb.cloudos_id FROM iyun_vdc_vlb lb WHERE lb.id = lbid)"/>
+		<property name="poolId" type="string" formula="(SELECT p2h.poolId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.hmonitorId = lbid)"/>
+		<property name="poolCloudosId" type="string" formula="(SELECT pool.cloudos_id FROM iyun_vlb_pools pool WHERE pool.id = ((SELECT p2h.poolId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.hmonitorId = lbid)))"/>
+	</class>
+</hibernate-mapping>

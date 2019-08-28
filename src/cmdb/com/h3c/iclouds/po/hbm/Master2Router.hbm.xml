@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Master2Router" table="cmdb_asm_master2router">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="assigned" />
+        </id>
+        <property name="cpu" type="string">
+            <column name="cpu" length="50"/>
+        </property>
+        <property name="ram" type="string">
+            <column name="ram" length="50"/>
+        </property>
+        <property name="ipv4RRate" type="string">
+            <column name="ipv4RRate" length="50"/>
+        </property>
+        <property name="ipv6RRate" type="string">
+            <column name="ipv6RRate" length="50"/>
+        </property>
+        <property name="mpuSlots" type="string">
+            <column name="mpuSlots" length="50"/>
+        </property>
+        <property name="baseSlots" type="string">
+            <column name="baseSlots" length="50"/>
+        </property>
+        <property name="swCapacity" type="string">
+            <column name="swCapacity" length="50"/>
+        </property>
+        <property name="pacRate" type="string">
+            <column name="pacRate" length="50"/>
+        </property>
+        <property name="remark" type="string" >
+            <column name="remark" length="600" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

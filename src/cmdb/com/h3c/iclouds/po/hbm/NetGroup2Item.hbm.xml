@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.NetGroup2Item" table="cmdb_netdevice_group2items">
+        <id name="id" column="id">
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="stackId" column="stackid" update="false"/>
+        <property name="serial" column="serino" update="false"/>
+        <property name="ncore" column="ncore" update="false"/>
+        <property name="memTotal" column="memtotal" update="false"/>
+        <property name="masterId" column="masterid" update="false"/>
+        <property name="remark" column="remark"/>
+        <property name="assetTypeId" formula="(SELECT g.asstype FROM cmdb_netdevice_groups g WHERE g.id = stackid)" />
+        <property name="assetType" formula="(SELECT code.codename FROM iyun_base_initcode code WHERE code.id=(SELECT g.asstype FROM cmdb_netdevice_groups g WHERE g.id = stackid))" />
+        <property name="assetTypeCode" formula="(SELECT code.codeid FROM iyun_base_initcode code WHERE code.id=(SELECT g.asstype FROM cmdb_netdevice_groups g WHERE g.id = stackid))" />
+        <property name="stackName" formula="(SELECT g.stackname FROM cmdb_netdevice_groups g WHERE g.id = stackid)" />
+        <property name="masterName" formula="(SELECT m.assetname FROM cmdb_asm_master m WHERE m.id = masterid)" />
+        <property name="isAlone" formula="(SELECT g.isstandalone FROM cmdb_netdevice_groups g WHERE g.id = stackid)" />
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+    </class>
+</hibernate-mapping>

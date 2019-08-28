@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Role2Res" table="iyun_sm_role2Res">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="roleId" type="string" >
+            <column name="roleId" length="36"/>
+        </property>
+        <property name="resId" type="string" >
+            <column name="resId" length="36" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <many-to-one name="resource" class="com.h3c.iclouds.po.Resource" insert="false" update="false">
+        	<column name="resId"></column>
+		</many-to-one>
+		
+		<many-to-one name="role" class="com.h3c.iclouds.po.Role" insert="false" update="false">
+        	<column name="roleId"></column>
+		</many-to-one>
+    </class>
+</hibernate-mapping>

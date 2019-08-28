@@ -1,0 +1,1752 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-12-17 14:00:59 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<sql-query name="query.resource.by.userId">
+	   	<![CDATA[
+			FROM Resource r
+			WHERE EXISTS (
+				SELECT 1 FROM Role2Res rr
+				WHERE EXISTS (
+					SELECT 1 FROM User2Role ur WHERE ur.userId = :USERID AND rr.roleId = ur.roleId
+				) AND rr.resId = r.id
+			)
+	   	]]>
+	</sql-query>
+
+	<!-- 根据业务id查询审批权限 -->
+	<sql-query name="approve.auth">
+	   <![CDATA[
+		SELECT COUNT(1) AS ct FROM iyun_sm_user2role r WHERE EXISTS(
+			SELECT t.roleid from iyun_flow_workrole t 
+				WHERE t.workflowid = :WORKFLOWID
+					AND t.processsegment = :SEGMENT
+				AND r.roleid = t.roleid
+			) AND r.userid = :USERID
+	   ]]>
+	</sql-query>
+
+	<!-- 查询最高级别部门id -->
+	<sql-query name="query.head.department">
+	   <![CDATA[
+		WITH RECURSIVE temptable AS (
+			SELECT * FROM iyun_sm_department
+				WHERE
+					ID = (SELECT t.deptid FROM iyun_sm_user t WHERE t.id = :USERID)
+			UNION ALL
+			SELECT iyun_sm_department.* FROM iyun_sm_department,
+				temptable
+			WHERE
+				iyun_sm_department. ID = temptable.parentid
+		) SELECT id FROM temptable WHERE parentid = '-1';
+	   ]]>
+	</sql-query>
+
+	<!-- 查询最高级别部门id -->
+	<sql-query name="query.lower.departments">
+	   <![CDATA[
+		WITH RECURSIVE temptable AS (
+			SELECT * FROM iyun_sm_department
+				WHERE
+					id = (SELECT t.deptid FROM iyun_sm_user t WHERE t.id = :USERID)
+			UNION ALL
+			SELECT b.* FROM iyun_sm_department b INNER JOIN temptable C ON b.parentid = C .id
+		) SELECT id FROM temptable;
+	   ]]>
+	</sql-query>
+
+	<!-- 查询可审批的申请单 -->
+	<sql-query name="query.request.master.approve.and.history.count">
+	   <![CDATA[
+	   	SELECT COUNT(REQUEST.id) FROM (
+		   	SELECT 
+				INNER_REQUEST2.id,
+				INNER_REQUEST2.projectname,	
+				INNER_REQUEST2.cusname,
+				INNER_REQUEST2.reqcode,
+				INNER_REQUEST2.projectdesc,
+				INNER_REQUEST2.chgflag,
+				INNER_REQUEST2.step,
+				INNER_REQUEST2.status,
+				INNER_REQUEST2.workflowid,
+				INNER_REQUEST2.createddate,
+				INNER_REQUEST2.createdby,
+				INNER_REQUEST2.responsible,
+				(
+					SELECT COUNT(temp.id) FROM bus_req_master temp WHERE
+						temp.id = INNER_REQUEST2.id AND (
+						EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = INNER_REQUEST2.roleid AND ur.userid = :USERID)
+						OR 
+						(temp.createdby = :USERID AND temp.step = 'usertask7')
+					) 
+					AND (temp.responsible IS NULL OR temp.responsible = :USERID)
+					AND (
+                       CASE WHEN INNER_REQUEST2.step in ('usertask2', 'usertask3') then 
+                       EXISTS(SELECT 1 FROM iyun_sm_user tt WHERE tt.id = INNER_REQUEST2.createdby AND tt.projectid = 
+                        (SELECT ttt.projectid FROM iyun_sm_user ttt WHERE ttt.id = :USERID))
+                       ELSE 1 = 1 END
+                    )
+				) AS allowed
+			FROM (
+				SELECT 
+					INNER_REQUEST.id,
+					INNER_REQUEST.projectname,	
+					(SELECT t.cusName FROM bus_cis_custom t WHERE t.id = INNER_REQUEST.cusId) AS cusname,
+					INNER_REQUEST.reqcode,
+					INNER_REQUEST.projectdesc,
+					INNER_REQUEST.chgflag,
+					INNER_REQUEST.step,
+					INNER_REQUEST.status,
+					INNER_REQUEST.workflowid,
+					INNER_REQUEST.createddate,
+					INNER_REQUEST.createdby,
+					INNER_REQUEST.responsible,
+					INNER_REQUEST.roleid
+				FROM (
+					SELECT * FROM iyun_req_master_ongoing T
+						WHERE T.rolekey LIKE '%department' AND EXISTS (
+							SELECT 1 FROM (
+								WITH RECURSIVE temptable AS (
+									SELECT * FROM iyun_sm_department WHERE ID = (SELECT T.deptid FROM iyun_sm_user T WHERE T.ID = :USERID)
+									UNION ALL
+									SELECT b.* FROM iyun_sm_department b INNER JOIN temptable C ON b.parentid = C.ID
+								) SELECT ID FROM temptable
+							) DEPT_IN WHERE DEPT_IN.ID = T.deptid
+						)
+					UNION ALL
+					SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey NOT LIKE '%department'
+					UNION ALL
+					SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey is null
+				) INNER_REQUEST 
+					WHERE (
+						EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = INNER_REQUEST.roleid AND ur.userid = :USERID)
+						OR 
+						(INNER_REQUEST.createdby = :USERID AND INNER_REQUEST.step = 'usertask7')
+					) 
+					AND (INNER_REQUEST.responsible IS NULL OR INNER_REQUEST.responsible = :USERID)
+					AND (
+					   CASE WHEN INNER_REQUEST.step in ('usertask2', 'usertask3') then 
+					   EXISTS(SELECT 1 FROM iyun_sm_user tt WHERE tt.id = INNER_REQUEST.createdby AND tt.projectid = 
+                        (SELECT ttt.projectid FROM iyun_sm_user ttt WHERE ttt.id = :USERID))
+                       ELSE 1 = 1 END
+					) 
+				UNION 
+				SELECT 
+					t.id,
+					t.projectname,	
+					(SELECT cus.cusName FROM bus_cis_custom cus WHERE cus.id = t.cusId) AS cusname,
+					t.reqcode,
+					t.projectdesc,
+					t.chgflag,
+					t.step,
+					t.status,
+					t.workflowid,
+					t.createddate,
+					t.createdby,
+					t.responsible,
+					(SELECT wr.roleid FROM iyun_flow_workrole wr WHERE wr.processsegment = t.step AND wr.workflowid = t.workflowid) as roleid
+				FROM bus_req_master t
+				WHERE 
+					EXISTS(SELECT 1 FROM bus_req_master2approvelog ml WHERE ml.reqid = t.id AND ml.createdby = :USERID)
+					AND (t.responsible is null or t.responsible = :USERID)
+			) INNER_REQUEST2
+		) REQUEST
+	   ]]>
+	</sql-query>
+
+	<!-- 查询可审批的申请单 -->
+	<sql-query name="query.request.master.approve.and.history">
+	   <![CDATA[
+	   	SELECT *,
+   	       (CASE 
+		        WHEN REQUEST.lasthandledate + interval '1 days' > now() OR REQUEST.allowed = '0'
+		        THEN 'normal'
+		        ELSE 'red' END
+		    ) AS color
+	   	FROM (
+		   	SELECT 
+				INNER_REQUEST2.id,
+				INNER_REQUEST2.projectname,	
+				INNER_REQUEST2.cusname,
+				INNER_REQUEST2.reqcode,
+				INNER_REQUEST2.projectdesc,
+				INNER_REQUEST2.chgflag,
+				INNER_REQUEST2.step,
+				INNER_REQUEST2.status,
+				INNER_REQUEST2.workflowid,
+				INNER_REQUEST2.createddate,
+				INNER_REQUEST2.createdby,
+				INNER_REQUEST2.responsible,
+				(
+					SELECT COUNT(temp.id) FROM bus_req_master temp WHERE
+						temp.id = INNER_REQUEST2.id AND (
+						EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = INNER_REQUEST2.roleid AND ur.userid = :USERID)
+						OR 
+						(temp.createdby = :USERID AND temp.step = 'usertask7')
+					) 
+					AND (temp.responsible IS NULL OR temp.responsible = :USERID)
+					AND (
+                       CASE WHEN INNER_REQUEST2.step in ('usertask2', 'usertask3') then 
+                       EXISTS(SELECT 1 FROM iyun_sm_user tt WHERE tt.id = INNER_REQUEST2.createdby AND tt.projectid = 
+                        (SELECT ttt.projectid FROM iyun_sm_user ttt WHERE ttt.id = :USERID))
+                       ELSE 1 = 1 END
+                    )
+				) AS allowed,
+				(SELECT mll.createddate from bus_req_master2approvelog mll where mll.reqid = INNER_REQUEST2.id order by mll.createddate desc limit 1) as lasthandledate
+			FROM (
+				SELECT 
+					INNER_REQUEST.id,
+					INNER_REQUEST.projectname,	
+					(SELECT t.cusName FROM bus_cis_custom t WHERE t.id = INNER_REQUEST.cusId) AS cusname,
+					INNER_REQUEST.reqcode,
+					INNER_REQUEST.projectdesc,
+					INNER_REQUEST.chgflag,
+					INNER_REQUEST.step,
+					INNER_REQUEST.status,
+					INNER_REQUEST.workflowid,
+					INNER_REQUEST.createddate,
+					INNER_REQUEST.createdby,
+					INNER_REQUEST.responsible,
+					INNER_REQUEST.roleid
+				FROM (
+					SELECT * FROM iyun_req_master_ongoing T
+						WHERE T.rolekey LIKE '%department' AND EXISTS (
+							SELECT 1 FROM (
+								WITH RECURSIVE temptable AS (
+									SELECT * FROM iyun_sm_department WHERE ID = (SELECT T.deptid FROM iyun_sm_user T WHERE T.ID = :USERID)
+									UNION ALL
+									SELECT b.* FROM iyun_sm_department b INNER JOIN temptable C ON b.parentid = C.ID
+								) SELECT ID FROM temptable
+							) DEPT_IN WHERE DEPT_IN.ID = T.deptid
+						)
+					UNION ALL
+					SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey NOT LIKE '%department'
+					UNION ALL
+					SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey is null
+				) INNER_REQUEST 
+					WHERE (
+						EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = INNER_REQUEST.roleid AND ur.userid = :USERID)
+						OR 
+						(INNER_REQUEST.createdby = :USERID AND INNER_REQUEST.step = 'usertask7')
+					) 
+					AND (INNER_REQUEST.responsible IS NULL OR INNER_REQUEST.responsible = :USERID)
+					AND (
+                       CASE WHEN INNER_REQUEST.step in ('usertask2', 'usertask3') then 
+                       EXISTS(SELECT 1 FROM iyun_sm_user tt WHERE tt.id = INNER_REQUEST.createdby AND tt.projectid = 
+                        (SELECT ttt.projectid FROM iyun_sm_user ttt WHERE ttt.id = :USERID))
+                       ELSE 1 = 1 END
+                    )
+				UNION 
+				SELECT 
+					t.id,
+					t.projectname,	
+					(SELECT cus.cusName FROM bus_cis_custom cus WHERE cus.id = t.cusId) AS cusname,
+					t.reqcode,
+					t.projectdesc,
+					t.chgflag,
+					t.step,
+					t.status,
+					t.workflowid,
+					t.createddate,
+					t.createdby,
+					t.responsible,
+					(SELECT wr.roleid FROM iyun_flow_workrole wr WHERE wr.processsegment = t.step AND wr.workflowid = t.workflowid) as roleid
+				FROM bus_req_master t
+				WHERE 
+					EXISTS(SELECT 1 FROM bus_req_master2approvelog ml WHERE ml.reqid = t.id AND ml.createdby = :USERID)
+					AND (t.responsible is null or t.responsible = :USERID)
+			) INNER_REQUEST2
+		) REQUEST
+	   ]]>
+	</sql-query>
+
+	<!-- 查询可审批的申请单 -->
+	<sql-query name="query.request.master.approve">
+	   <![CDATA[
+		SELECT 
+			REQUEST.*,
+			(SELECT t.cusName FROM bus_cis_custom t WHERE t.id = REQUEST.cusId) AS cusname 
+		FROM (
+			SELECT * FROM iyun_req_master_ongoing T
+				WHERE T.rolekey LIKE '%department' AND EXISTS (
+					SELECT 1 FROM (
+						WITH RECURSIVE temptable AS (
+							SELECT * FROM iyun_sm_department WHERE ID = (SELECT T.deptid FROM iyun_sm_user T WHERE T.ID = :USERID)
+							UNION ALL
+							SELECT b.* FROM iyun_sm_department b INNER JOIN temptable C ON b.parentid = C.ID
+						) SELECT ID FROM temptable
+					) DEPT_IN WHERE DEPT_IN.ID = T.deptid
+				)
+			UNION ALL
+			SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey NOT LIKE '%department'
+			UNION ALL
+			SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey is null
+		) REQUEST 
+			WHERE (
+				EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+				OR 
+				(REQUEST.createdby = :USERID AND REQUEST.step = 'usertask7')
+			) AND (REQUEST.responsible IS NULL OR REQUEST.responsible = :USERID)
+	   ]]>
+	</sql-query>
+
+	<!-- 查询可审批的申请单数量 -->
+	<sql-query name="query.request.master.approve.count">
+	   <![CDATA[
+		SELECT COUNT(REQUEST.id) FROM (
+			SELECT * FROM iyun_req_master_ongoing T
+				WHERE T.rolekey LIKE '%department' AND EXISTS (
+					SELECT 1 FROM (
+						WITH RECURSIVE temptable AS (
+							SELECT * FROM iyun_sm_department WHERE ID = (SELECT T.deptid FROM iyun_sm_user T WHERE T.ID = :USERID)
+							UNION ALL
+							SELECT b.* FROM iyun_sm_department b INNER JOIN temptable C ON b.parentid = C.ID
+						) SELECT ID FROM temptable
+					) DEPT_IN WHERE DEPT_IN.ID = T.deptid
+				)
+			UNION ALL
+			SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey NOT LIKE '%department'
+			UNION ALL
+			SELECT * FROM iyun_req_master_ongoing T WHERE T .rolekey is null
+		) REQUEST 
+			WHERE (
+				EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+				OR 
+				(REQUEST.createdby = :USERID AND REQUEST.step = 'usertask7')
+			) AND (REQUEST.responsible IS NULL OR REQUEST.responsible = :USERID)
+	   ]]>
+	</sql-query>
+
+    <!-- 查询可审批的申请单 -->
+    <sql-query name="query.inc.master.approve">
+       <![CDATA[
+        SELECT 
+            REQUEST.*,
+            (select t.classname from iyun_base_prdclass t where t.id = REQUEST.incType) as incTypeValue
+        FROM iyun_inc_master_ongoing REQUEST 
+        WHERE ((
+            EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+            AND 
+            REQUEST.responsible = :USERID
+        ) 
+        OR (REQUEST.createdby = :USERID AND REQUEST.step = 'ewo_usertask4')
+        OR (REQUEST.responsible IS NULL AND EXISTS 
+                (SELECT 1 FROM iyun_sm_user2role ur 
+                        WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+        ) OR EXISTS(SELECT 1 FROM inc_req_master2approvelog irma WHERE irma.jobid = REQUEST.id AND irma.approver = :USERID))
+       ]]>
+    </sql-query>
+
+	<!-- 查询可审批的申请单 -->
+    <sql-query name="query.inc.master.approve.and.history">
+       <![CDATA[
+       SELECT 
+         *,
+         (CASE 
+                WHEN REQUEST.lasthandledate + interval '1 days' > now() OR REQUEST.allowed = '0'
+                THEN 'normal'
+                ELSE 'red' END
+            ) AS color 
+       FROM (
+	    SELECT 
+	        T.*, (
+	            case 
+	                when t.step = '3' then '0' 
+	                ELSE (
+	                    CASE 
+	                        WHEN t.createdby = :USERID THEN '1'
+	                        WHEN t.step in ('ewo_usertask2', 'ewo_usertask3') AND EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = T .roleid AND ur.userid = :USERID) 
+	                            THEN '1'
+	                    ELSE '0' END
+	                )  END
+	        ) as allowed,
+	        (SELECT mll.createddate from inc_req_master2approvelog mll where mll.jobid = T.id order by mll.createddate desc limit 1) as lasthandledate
+	    FROM iyun_inc_master_task T
+	    WHERE T .createdby = :USERID
+	    OR EXISTS (
+	        SELECT 1
+	        FROM inc_req_master2approvelog ml
+	        WHERE ml.jobid = T . ID AND ml.approver = :USERID
+	    ) OR (
+	        EXISTS (
+	            SELECT 1 FROM iyun_sm_user2role ur
+	            WHERE ur.roleid = T .roleid AND ur.userid = :USERID
+	        ) 
+	        AND (T .responsible = :USERID OR T .responsible IS NULL)
+	    )
+	) REQUEST 
+       ]]>
+    </sql-query>
+
+	<!-- 查询可审批的申请单数量 -->
+	<sql-query name="query.inc.master.approve.count">
+	   <![CDATA[
+		SELECT 
+			COUNT(REQUEST.id)
+		FROM iyun_inc_master_ongoing REQUEST 
+		WHERE ((
+			EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+			AND 
+			REQUEST.responsible = :USERID
+		) OR (REQUEST.createdby = :USERID AND REQUEST.step = 'ewo_usertask4')
+		OR (REQUEST.responsible IS NULL AND EXISTS 
+				(SELECT 1 FROM iyun_sm_user2role ur 
+						WHERE ur.roleid = REQUEST.roleid AND ur.userid = :USERID)
+		) OR EXISTS(SELECT 1 FROM inc_req_master2approvelog irma WHERE irma.jobid = REQUEST.id AND irma.approver = :USERID))
+	   ]]>
+	</sql-query>
+
+	<!-- 查询可审批的申请单数量 -->
+    <sql-query name="query.inc.master.approve.and.history.count">
+       <![CDATA[
+        SELECT COUNT(REQUEST.id) FROM (
+		    SELECT 
+		        T.*, (
+		            CASE 
+		                WHEN t.step = '3' THEN '0' 
+		                ELSE (
+		                    CASE 
+		                        WHEN t.createdby = :USERID THEN '1'
+		                        WHEN t.step in ('ewo_usertask2', 'ewo_usertask3') AND EXISTS (SELECT 1 FROM iyun_sm_user2role ur WHERE ur.roleid = T .roleid AND ur.userid = :USERID) 
+		                            THEN '1'
+		                    ELSE '0' END
+		                )  END
+		        ) AS allowed
+		    FROM iyun_inc_master_task T
+		    WHERE T .createdby = :USERID
+		    OR EXISTS (
+		        SELECT 1
+		        FROM inc_req_master2approvelog ml
+		        WHERE ml.jobid = T . ID AND ml.approver = :USERID
+		    ) OR (
+		        EXISTS (
+		            SELECT 1 FROM iyun_sm_user2role ur
+		            WHERE ur.roleid = T .roleid AND ur.userid = :USERID
+		        ) 
+		        AND (T .responsible = :USERID OR T .responsible IS NULL)
+		    )
+		) REQUEST 
+       ]]>
+    </sql-query>
+
+	<!-- 查询当前环节可审批人（不包含部门过滤） -->
+	<sql-query name="query.master.approver">
+	   <![CDATA[
+		SELECT ur.userid, 
+			(SELECT u.username FROM iyun_sm_user u WHERE u. ID = ur.userid ) AS username,
+			(SELECT u.email FROM iyun_sm_user u WHERE u. ID = ur.userid ) AS email,
+			(SELECT u.projectid FROM iyun_sm_user u WHERE u. ID = ur.userid ) AS projectid
+		FROM iyun_sm_user2role ur
+		WHERE EXISTS (
+			SELECT 1 FROM iyun_flow_workrole wr WHERE ur.roleid = wr.roleid AND wr.processsegment = :SEGMENT AND wr.workflowid = :WORKFLOWID
+		) 
+		AND ur.userid <> :USERID
+	    AND EXISTS(SELECT 1 FROM iyun_sm_user tt WHERE tt.id = ur.userid AND tt.projectid = 
+                (SELECT ttt.projectid FROM iyun_sm_user ttt WHERE ttt.id = :USERID))
+	   ]]>
+	</sql-query>
+
+	<!-- 查询当前环节可审批人,需要做部门过滤 -->
+	<sql-query name="query.master.approver.department">
+	   <![CDATA[
+		SELECT approver.userid, approver.username, approver.email
+			FROM (
+			SELECT 
+				ur.userid, 
+				(SELECT u.email FROM iyun_sm_user u WHERE u. ID = ur.userid ) AS email,
+				(SELECT u.username FROM iyun_sm_user u WHERE u. ID = ur.userid ) AS username,
+				(SELECT DEPT_HEAD.ID FROM (
+					WITH RECURSIVE temptable AS (
+						SELECT * FROM iyun_sm_department WHERE ID = (SELECT T .deptid FROM iyun_sm_user T WHERE T . ID = ur.userid)
+						UNION ALL
+						SELECT iyun_sm_department.* FROM iyun_sm_department, temptable WHERE iyun_sm_department. ID = temptable.parentid
+					) SELECT ID FROM temptable WHERE parentid = '-1' LIMIT 1
+				) DEPT_HEAD) AS head_department
+			FROM iyun_sm_user2role ur
+			WHERE EXISTS ( SELECT 1 FROM iyun_flow_workrole wr WHERE ur.roleid = wr.roleid AND wr.processsegment = :SEGMENT AND wr.workflowid = :WORKFLOWID)
+		) approver WHERE approver.head_department IS NOT NULL AND approver.head_department = (
+			SELECT DEPT_HEAD. ID FROM (
+				WITH RECURSIVE temptable AS (
+					SELECT * FROM iyun_sm_department
+					WHERE ID = (SELECT T .deptid FROM iyun_sm_user T WHERE T.ID = :USERID)
+					UNION ALL
+					SELECT iyun_sm_department.* FROM iyun_sm_department, temptable WHERE iyun_sm_department. ID = temptable.parentid
+				) SELECT ID FROM temptable WHERE parentid = '-1' LIMIT 1
+			) DEPT_HEAD
+		)
+	   ]]>
+	</sql-query>
+
+	<!-- 查询当前环节可审批人,需要做部门过滤 -->
+	<sql-query name="query.asm.in.room.count">
+	   <![CDATA[
+		SELECT count(ad.id) as ct FROM cmdb_asm_asset2drawer ad
+		WHERE EXISTS (
+			SELECT 1 FROM cmdb_dc_draws d 
+			WHERE ad.drawsid = d. ID AND d.roomid = :ROOMID
+		)
+	   ]]>
+	</sql-query>
+
+	<!-- 查询设备在机柜的情况 -->
+	<sql-query name="query.asset.in.draw">
+	   <![CDATA[
+		SELECT 
+			ad.*, 
+			(SELECT ci.unum FROM cmdb_asm_class2items ci 
+				WHERE ci."id" = (SELECT M .assmode FROM cmdb_asm_master M
+					WHERE M . ID = ad. ID)
+			) AS um
+		FROM cmdb_asm_asset2drawer ad
+		WHERE ad.drawsid = :DRAWSID
+			AND ad.id <> :ID
+		ORDER BY ad.unumb asc
+	   ]]>
+	</sql-query>
+	<!-- 查询云主机列表 -->
+	<sql-query name="query.novavm.list">
+	   <![CDATA[
+		SELECT
+			n."id" AS ID,
+			n.uuid AS uuid,
+			n.vmstate AS vmState,
+			n.powerstate AS powerState,
+			n.hostname AS hostName,
+			n.createddate AS createDate,
+			n.owner AS userId,
+			n.manageip AS manageIp,
+			d.ips AS ipaddress,
+			d.subnetnames AS name,
+			d.cidrs AS cidr,
+			(select name from iyun_keystone_project t where t.id = n.projectid) as projectname, 
+			u.loginname as owner,
+			d.ip_address
+		FROM
+			iyun_nova_vm n
+		LEFT JOIN device_ip_list_group d ON n.uuid = d.device_id
+		LEFT JOIN iyun_sm_user u ON u.id = n.owner
+		WHERE
+		n."id" NOT IN (
+			SELECT
+				r.resid
+			FROM
+				iyun_recycle_items r
+				where r.recycleaction <> '0'
+		)
+	   ]]>
+	</sql-query>
+	<!-- 查询云主机列表 -->
+	<sql-query name="query.novavm.list.count">
+	   <![CDATA[
+		SELECT
+			count(*)
+		FROM
+			iyun_nova_vm n
+		LEFT JOIN device_ip_list_group d ON n.uuid = d.device_id
+		WHERE
+		n."id" NOT IN (
+			SELECT
+				r.resid
+			FROM
+				iyun_recycle_items r
+				where r.recycleaction <> '0'
+		)
+	   ]]>
+	</sql-query>
+	<!-- 查询云主机详细信息 -->
+	<sql-query name="query.novavm.detail">
+	   <![CDATA[
+	   SELECT
+			n.*,
+			d.ips AS ipAddress
+		FROM
+			iyun_nova_vm n
+		LEFT JOIN device_ip_list_group d ON n.uuid = d.device_id
+		WHERE
+			n. ID = :novaVmId AND n.owner = :owner
+	   ]]>
+	</sql-query>
+
+	<!-- 查询租户的管理员名称-->
+	<sql-query name="query.adminName.by.projectId">
+	   <![CDATA[
+	   SELECT u.username FROM iyun_sm_user as u
+	   LEFT JOIN iyun_sm_user2role as r ON u.id = r.userid
+	   WHERE r.roleid IN (:LIST)
+	   and u.projectid = :projectId
+	   ]]>
+	</sql-query>
+	<!-- 查询未被禁用，且还未是租户的客户-->
+	<sql-query name="query.not.tenant.custom">
+	   <![CDATA[
+		   SELECT
+				*
+			FROM
+				bus_cis_custom C
+			WHERE
+				C . ID NOT IN (
+					SELECT
+						cusid
+					FROM
+						iyun_keystone_project P
+					WHERE
+						COALESCE (P .cusid, '') <> ''
+		) AND status ='0' AND c.cusname LIKE :text
+	   ]]>
+	</sql-query>
+
+
+	<!-- 查询租户的管理员名称-->
+	<sql-query name="query.macAddress.by.projectId">
+	   <![CDATA[
+	   SELECT a.uuid AS UUID, b.mac_address  AS MAC FROM (
+ 			SELECT * FROM iyun_nova_vm WHERE image_ref = 'AB' and
+ 			projectid = :projectId
+		) as a 
+	   LEFT JOIN  iyun_vdc_ports as b ON a.ID = b.device_id
+	   ]]>
+	</sql-query>
+
+	<!-- 获取租户的可用域-->
+	<sql-query name="query.project">
+	   <![CDATA[
+		   SELECT
+			*
+			FROM
+				project_list p
+			WHERE p.roleid in (:roleid)
+	   ]]>
+	</sql-query>
+
+	<!-- 云主机回收站列表查询-->
+	<sql-query name="query.recycleitems">
+	   <![CDATA[
+		  SELECT
+			n."id" AS novaid,
+			i.*, n.hostname,
+			n.vmstate,
+			u.loginname AS ownername,
+			po. NAME AS projectname,
+			G .ips
+		  FROM
+			iyun_recycle_items i
+		  LEFT JOIN iyun_nova_vm n ON i.resid = n."id"
+		  LEFT JOIN device_ip_list_group G ON n.uuid = G .device_id
+		  LEFT JOIN iyun_sm_user u ON u. ID = n."owner"
+		  LEFT JOIN iyun_keystone_project po ON po. ID = n.projectid
+	   ]]>
+	</sql-query>
+	<!-- 云主机回收站列表查询-->
+	<sql-query name="query.recycleitems.count">
+	   <![CDATA[
+		  SELECT
+			count(*)
+		FROM
+			iyun_recycle_items i
+		LEFT JOIN iyun_nova_vm n ON i.resid = n."id"
+		LEFT JOIN device_ip_list_group G ON n.uuid = G .device_id
+	   ]]>
+	</sql-query>
+	<!-- 回收站云硬盘列表查询-->
+	<sql-query name="query.recycleitems.volume">
+	   <![CDATA[
+	   SELECT
+			i.*, v."id" AS volumeid,
+			v. NAME,
+			v.volumetype,
+			v."size",
+			u.loginname AS ownername,
+			po. NAME AS projectname,
+			v.status
+		FROM
+			iyun_recycle_items i
+		LEFT JOIN iyun_nova_volumes v ON i.resid = v."id"
+		LEFT JOIN iyun_sm_user u ON u. ID = v.owner2
+		LEFT JOIN iyun_keystone_project po ON po. ID = v.projectid
+	   ]]>
+	</sql-query>
+	<sql-query name="query.recycleitems.volume.count">
+	   <![CDATA[
+		  SELECT
+			count(*)
+		FROM
+			iyun_recycle_items i
+		LEFT JOIN iyun_nova_volumes v ON i.resid = v."id"
+	   ]]>
+	</sql-query>
+
+	<!-- 查询子租户配额和-->
+	<sql-query name="query.quota.sum">
+	   <![CDATA[
+	   SELECT
+			"sum" (T .hard_limit)
+		FROM
+			iyun_quota_tenant t
+		WHERE
+			t.tenant_id IN (
+				SELECT
+					P ."id"
+				FROM
+					iyun_keystone_project P
+				WHERE
+					P .parent_id =:projectId
+					And p.flag=0
+			)And t.deleted=0 And t.class_code=:classCode
+	   ]]>
+	</sql-query>
+
+	<!-- 查询app视图-->
+	<sql-query name="query.app.views">
+	   <![CDATA[
+	   SELECT
+			i. ID AS itemId,
+			i."option",
+			i.itemtype,
+			i.name,
+			re.appid,
+			re.previous AS pid
+		FROM
+			(
+				WITH RECURSIVE temptable AS (
+					SELECT
+						r.appid,
+						r.previous,
+						r.viewid
+					FROM
+						cmdb_app_relations r
+					WHERE
+						r.appid =:appId
+					UNION ALL
+						SELECT
+							ar.appid,
+							ar.previous,
+							ar.viewid
+						FROM
+							cmdb_app_relations ar
+						INNER JOIN temptable T ON T .appid = ar.previous
+				) SELECT
+					T .appid,
+					T .viewid,
+					string_agg (T .previous, ';') AS previous
+				FROM
+					temptable T
+				GROUP BY
+					T .appid,
+					T .viewid
+			) re
+		LEFT JOIN cmdb_app_items i ON re.appid = i. ID;
+	   
+	   ]]>
+	</sql-query>
+
+	<!-- 查询app视图-->
+	<sql-query name="query.nova.cidr">
+	   <![CDATA[
+		SELECT
+		d.cidrs AS cidr
+	FROM
+		iyun_nova_vm n
+	LEFT JOIN device_ip_list_group d ON n.uuid = d.device_id
+	WHERE
+		n.projectid =:tenantId
+	   ]]>
+	</sql-query>
+	<!-- 查询app个数-->
+	<sql-query name="query.app.center.app">
+	   <![CDATA[
+		SELECT
+		"count" (*) As num_app
+		FROM
+		cmdb_application_master
+		
+	   ]]>
+	</sql-query>
+	<!-- 查询nova个数-->
+	<sql-query name="query.app.center.nova">
+	   <![CDATA[
+		SELECT
+			"count" (*) AS num_nova
+		FROM
+			iyun_nova_vm n
+	   ]]>
+	</sql-query>
+
+	<!-- 查询nova个数-->
+	<sql-query name="query.app.center.root.nova">
+	   <![CDATA[
+		SELECT
+			"count" (*) AS num_nova
+		FROM
+			iyun_nova_vm n
+	   ]]>
+	</sql-query>
+	<!-- 查询db个数-->
+	<sql-query name="query.app.center.db">
+	   <![CDATA[
+		SELECT
+			"count" (*) As num_db
+		FROM
+			cmdb_database_master db
+	   ]]>
+	</sql-query>
+	<!-- 查询floatingips个数-->
+	<sql-query name="query.app.center.floatingips">
+	   <![CDATA[
+		SELECT
+			"count" (*) AS ips
+		FROM
+			iyun_neutron_floatingips f
+		LEFT JOIN iyun_vdc_ports P ON f.floating_port_id = P ."id"
+	   ]]>
+	</sql-query>
+	<!-- 查询已使用量-->
+	<sql-query name="query.app.center.sum">
+	   <![CDATA[
+		SELECT
+		"sum"(n.vcpus) As cpu,
+		("sum"(n.memory)/1024) As memory,
+		"sum"(n.ramdisk) As ramdisk
+		FROM
+			iyun_nova_vm n
+	   ]]>
+	</sql-query>
+	<!-- 查询VDC使用了的网段-->
+	<sql-query name="query.vdc.ips">
+	   <![CDATA[
+		SELECT
+			i.first_ip AS startip,
+			i.last_ip AS endip
+		FROM
+			iyun_subnet_ipavailabilityrange i
+		WHERE
+			i.allocation_pool_id IN (
+				SELECT
+					pool. ID
+				FROM
+					iyun_subnet_ipallocationpools pool
+				WHERE
+					pool.subnet_id IN (
+						SELECT
+							sub. ID
+						FROM
+							iyun_vdc_subnet sub
+						WHERE
+							sub.network_id IN (
+								SELECT
+									net. ID
+								FROM
+									iyun_vdc_network net
+								WHERE
+									net.tenant_id = :tenantId
+								AND externalnetworks IS FALSE
+							)
+					)
+			)
+	   ]]>
+	</sql-query>
+
+	<!-- 查询近期用户登录日志 -->
+	<sql-query name = "query.user.lately.logs">
+	 <![CDATA[
+		SELECT createddate, result FROM iyun_sm_operatelogs 
+		WHERE userid = :userId ORDER BY createddate DESC LIMIT :times
+		]]>
+	</sql-query>
+
+	<!-- 查询租户最近未读通知公告 -->
+	<sql-query name = "query.tenant.lately.unread.notices">
+	 <![CDATA[
+		SELECT a.*, b.detail FROM iyun_base_notice a
+		LEFT JOIN iyun_notice_detail b ON a.id = b.notice_id 
+		WHERE a.id in (
+			SELECT c.noticeid FROM iyun_base_notice2project c 
+			WHERE tenantid = :tenantId 
+			AND  isread = FALSE ORDER BY updateddate DESC
+		)
+		]]>
+	</sql-query>
+
+	<!-- floatingip绑定云主机使用的云主机列表 -->
+	<sql-query name = "query.tenant.floatingip.novam">
+	 <![CDATA[
+		SELECT
+			n."id" AS ID,
+			n.hostname AS hostName,
+			n.uuid AS uuid,
+			n.vmstate AS vmState,
+			p.id as portid,
+			p.name as portName,
+			i.ip_address,
+			s.id subnetd,
+			s.name netname
+		FROM
+			iyun_nova_vm n
+		LEFT JOIN iyun_vdc_ports p ON p.device_id = n.uuid
+		LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = p."id"
+		LEFT JOIN iyun_vdc_subnet s ON s.id = i.subnet_id
+		WHERE
+		n."id" NOT IN (
+			SELECT
+				r.resid
+			FROM
+				iyun_recycle_items r
+				where r.recycleaction <> '0'
+		) AND n.vmstate in ('state_normal', 'state_stop')
+		AND n.projectid = :projectId
+		]]>
+	</sql-query>
+
+	<!-- floatingip绑定云主机使用的云主机列表 -->
+	<sql-query name = "query.user.floatingip.novam">
+	 <![CDATA[
+		SELECT
+			n."id" AS ID,
+			n.hostname AS hostName,
+			n.uuid AS uuid,
+			n.vmstate AS vmState,
+			p.id as portid,
+			p.name as portName,
+			i.ip_address,
+			s.id subnetd,
+			s.name netname
+		FROM
+			iyun_nova_vm n
+		LEFT JOIN iyun_vdc_ports p ON p.device_id = n.uuid
+		LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = p."id"
+		LEFT JOIN iyun_vdc_subnet s ON s.id = i.subnet_id
+		WHERE
+		n."id" NOT IN (
+			SELECT
+				r.resid
+			FROM
+				iyun_recycle_items r
+				where r.recycleaction <> '0'
+		) AND n.vmstate in ('state_normal', 'state_stop')
+		AND n.owner = :owner
+		]]>
+	</sql-query>
+
+	<!-- 路由连接到私有的网络列表 -->
+	<sql-query name = "query.route.interface.network">
+	 <![CDATA[
+		SELECT a.id as networkid, a.name,  a.route_id, b.cidr FROM iyun_vdc_network a
+		LEFT JOIN iyun_vdc_subnet b ON b.network_id = a.id
+		WHERE (a.route_id is  NULL OR a.route_id = '') and a.externalnetworks = FALSE 
+		AND a.tenant_id = :projectId
+		]]>
+	</sql-query>
+
+	<!-- 公网下的路由 -->
+	<sql-query name = "query.public.network.route">
+	 <![CDATA[
+		SELECT c.ip_address as floatingIp,r."name" FROM "public"."iyun_vdc_network" n
+		LEFT JOIN iyun_vdc_subnet s ON s.network_id = n."id"
+		LEFT JOIN iyun_vdc_ipallocations  c on c.subnet_id = s."id"
+		LEFT JOIN iyun_vdc_ports p ON p.id = c.port_id
+		LEFT JOIN iyun_vdc_route r ON r.gw_port_id = p."id"
+		WHERE n.externalnetworks = TRUE AND device_owner = 'network:router_gateway'
+		AND n.id = :networkId
+		]]>
+	</sql-query>
+
+	<!-- 公网查询具有网卡的主机 -->
+	<sql-query name = "query.public.port.novavm">
+	 <![CDATA[
+		SELECT
+				P .device_id,
+				n. ID,
+				n.hostname,
+				n.uuid,
+				P . ID AS portid,
+				P ."name" AS portname,
+				P .device_owner,
+				i.ip_address,
+				s. ID AS subnetd,
+				s."name" AS netname
+			FROM
+				iyun_vdc_ports P
+			LEFT JOIN (
+				SELECT
+					n. ID,
+					n.uuid,
+					n.hostname
+				FROM
+					iyun_nova_vm n
+				WHERE
+					n."id" NOT IN (
+						SELECT
+							r.resid
+						FROM
+							iyun_recycle_items r
+						WHERE
+							r.recycleaction <> '0'
+					)
+				AND n.vmstate IN (
+					'state_normal',
+					'state_stop'
+				)
+			) AS n ON (P .device_id = n.uuid)
+			LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = P ."id"
+			LEFT JOIN iyun_vdc_subnet s ON s."id" = i.subnet_id
+			WHERE
+				COALESCE (P .device_id, '') <> ''
+			AND P .device_owner IN (
+				'compute:cas',
+				'compute:None'
+			)
+			AND COALESCE (n.uuid, '') <> ''
+			AND s."id" IN (
+				SELECT
+					s1."id"
+				FROM
+					iyun_vdc_subnet s1
+				WHERE
+					s1.network_id IN (
+						SELECT
+							n."id"
+						FROM
+							iyun_vdc_network n
+						WHERE
+							n.route_id = (
+								SELECT
+									n.route_id
+								FROM
+									iyun_vdc_network n
+								WHERE
+									n."id" = (
+										SELECT
+											f.floating_network_id
+										FROM
+											iyun_neutron_floatingips f
+										WHERE
+											"id" =:fId
+									)
+							)
+						AND n.externalnetworks = FALSE
+					)
+			)
+			AND P ."id" NOT IN (
+				SELECT
+					fixed_port_id
+				FROM
+					iyun_neutron_floatingips
+				WHERE
+					COALESCE (fixed_port_id, '') <> ''
+			)
+		]]>
+	</sql-query>
+
+	<!-- 公网查询具有网卡的主机个数 -->
+	<sql-query name = "query.public.port.novavm.count">
+	 <![CDATA[
+		SELECT
+			count(*)
+			FROM
+				iyun_vdc_ports P
+			LEFT JOIN (
+				SELECT
+					n. ID,
+					n.uuid,
+					n.hostname
+				FROM
+					iyun_nova_vm n
+				WHERE
+					n."id" NOT IN (
+						SELECT
+							r.resid
+						FROM
+							iyun_recycle_items r
+						WHERE
+							r.recycleaction <> '0'
+					)
+				AND n.vmstate IN (
+					'state_normal',
+					'state_stop'
+				)
+			) AS n ON (P .device_id = n.uuid)
+			LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = P ."id"
+			LEFT JOIN iyun_vdc_subnet s ON s."id" = i.subnet_id
+			WHERE
+				COALESCE (P .device_id, '') <> ''
+			AND P .device_owner IN (
+				'compute:cas',
+				'compute:None'
+			)
+			AND COALESCE (n.uuid, '') <> ''
+			AND s."id" IN (
+				SELECT
+					s1."id"
+				FROM
+					iyun_vdc_subnet s1
+				WHERE
+					s1.network_id IN (
+						SELECT
+							n."id"
+						FROM
+							iyun_vdc_network n
+						WHERE
+							n.route_id = (
+								SELECT
+									n.route_id
+								FROM
+									iyun_vdc_network n
+								WHERE
+									n."id" = (
+										SELECT
+											f.floating_network_id
+										FROM
+											iyun_neutron_floatingips f
+										WHERE
+											"id" =:fId
+									)
+							)
+						AND n.externalnetworks = FALSE
+					)
+			)
+			AND P ."id" NOT IN (
+				SELECT
+					fixed_port_id
+				FROM
+					iyun_neutron_floatingips
+				WHERE
+					COALESCE (fixed_port_id, '') <> ''
+			)
+		]]>
+	</sql-query>
+
+	<!-- 公网查询具有网卡的主机 -->
+	<sql-query name = "query.public.novaflavor">
+	 <![CDATA[
+		SELECT
+				*
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								*
+							FROM
+								iyun_nova_flavor
+							WHERE
+								vcpus >= 2
+							ORDER BY
+								vcpus
+						) AS f
+					WHERE
+						f.ram >= 2048
+					ORDER BY
+						f.ram
+				) AS f
+			WHERE
+				f.disk >= 50
+			AND f.deleted = '0'
+			ORDER BY
+				f.disk
+			LIMIT 1
+		]]>
+	</sql-query>
+
+	<!-- 查询公网IP可连的监听器 -->
+	<sql-query name = "query.public.vips">
+	 <![CDATA[
+		SELECT
+				*
+			FROM
+				iyun_vlb_vips v
+			WHERE
+				v.vain_subnet_id IN (
+					SELECT
+						s1."id"
+					FROM
+						iyun_vdc_subnet s1
+					WHERE
+						s1.network_id IN (
+							SELECT
+								n."id"
+							FROM
+								iyun_vdc_network n
+							WHERE
+								n.route_id = (
+									SELECT
+										n.route_id
+									FROM
+										iyun_vdc_network n
+									WHERE
+										n."id" = (
+											SELECT
+												f.floating_network_id
+											FROM
+												iyun_neutron_floatingips f
+											WHERE
+												"id" =:fId
+										)
+								)
+							AND n.externalnetworks = FALSE
+						)
+				)
+			AND v.port_id NOT IN (
+				SELECT
+					fixed_port_id
+				FROM
+					iyun_neutron_floatingips
+				WHERE
+					COALESCE (fixed_port_id, '') <> ''
+			)
+		]]>
+	</sql-query>
+
+	<!-- 查询公网IP可连的监听器 -->
+	<sql-query name = "query.public.vips.count">
+	 <![CDATA[
+		SELECT
+				count(*)
+			FROM
+				iyun_vlb_vips v
+			WHERE
+				v.vain_subnet_id IN (
+					SELECT
+						s1."id"
+					FROM
+						iyun_vdc_subnet s1
+					WHERE
+						s1.network_id IN (
+							SELECT
+								n."id"
+							FROM
+								iyun_vdc_network n
+							WHERE
+								n.route_id = (
+									SELECT
+										n.route_id
+									FROM
+										iyun_vdc_network n
+									WHERE
+										n."id" = (
+											SELECT
+												f.floating_network_id
+											FROM
+												iyun_neutron_floatingips f
+											WHERE
+												"id" =:fId
+										)
+								)
+							AND n.externalnetworks = FALSE
+						)
+				)
+			AND v.port_id NOT IN (
+				SELECT
+					fixed_port_id
+				FROM
+					iyun_neutron_floatingips
+				WHERE
+					COALESCE (fixed_port_id, '') <> ''
+			)
+		]]>
+	</sql-query>
+
+	<!-- 查询云主机可挂载的网卡 -->
+	<sql-query name = "query.public.port">
+	 <![CDATA[
+		SELECT
+			p.*,
+			i.ip_address
+		FROM
+			iyun_vdc_ports P
+		LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = P ."id"
+		WHERE
+			COALESCE (device_owner, '') = ''
+		AND COALESCE (device_id, '') = ''
+		AND device_id = NULL
+		]]>
+	</sql-query>
+
+	<sql-query name = "query.public.port.count">
+	 <![CDATA[
+		SELECT
+			count(*)
+		FROM
+			iyun_vdc_ports P
+		LEFT JOIN iyun_vdc_ipallocations i ON i.port_id = P ."id"
+		WHERE
+			COALESCE (device_owner, '') = ''
+		AND COALESCE (device_id, '') = ''
+		AND device_id = NULL
+		]]>
+	</sql-query>
+
+	<sql-query name = "query.public.networkids">
+	 <![CDATA[
+			SELECT
+			n."id"
+		FROM
+			iyun_vdc_network n
+		WHERE
+			n.route_id = (
+				SELECT
+					n.route_id
+				FROM
+					iyun_vdc_network n
+				WHERE
+					n."id" = (
+						SELECT
+							f.floating_network_id
+						FROM
+							iyun_neutron_floatingips f
+						WHERE
+							"id" =:fId
+					)
+			)
+		AND n.externalnetworks = FALSE
+		]]>
+	</sql-query>
+
+    <sql-query name = "new.table.pfm.value.history">
+     <![CDATA[
+            DROP TABLE IF EXISTS ipm_pfm_value2history;
+			CREATE TABLE ipm_pfm_value2history (
+			  id                   VARCHAR(36)          NOT NULL,
+			  collecttime          TIMESTAMP            NOT NULL,
+			  uuid                 VARCHAR(36)          NOT NULL,
+			  restype              VARCHAR(36)          NOT NULL,
+			  item                 VARCHAR(36)          NOT NULL,
+			  keyvalue             FLOAT4               NOT NULL,
+			  CreatedDate          TIMESTAMP            NOT NULL,
+			  UpdatedDate          TIMESTAMP            NOT NULL
+			);
+        ]]>
+    </sql-query>
+
+    <sql-query name = "query.request.master.approver.handled.count">
+     <![CDATA[
+           SELECT
+			    COUNT (DISTINCT(l.reqid)) AS ct
+			FROM
+			    bus_req_master2approvelog l
+			LEFT JOIN bus_req_master r on l.reqid = r.id
+			WHERE l.createdby = :USERID
+			AND l.createddate > (now() - INTERVAL '30 day')
+        ]]>
+    </sql-query>
+    
+        <sql-query name = "query.inc.master.approver.handled.count">
+     <![CDATA[
+          SELECT
+			    COUNT (DISTINCT(l.jobid)) AS ct
+			FROM
+			    inc_req_master2approvelog l
+			LEFT JOIN inc_req_master r on l.jobid = r.id
+			WHERE l.createdby = :USERID
+			AND l.createddate > (now() - INTERVAL '30 day')
+
+        ]]>
+    </sql-query>
+
+    <sql-query name = "query.pfm.group.value">
+     <![CDATA[
+           SELECT
+		        AVG (T .keyvalue) AS v_avg,
+		        MAX (T .keyvalue) as v_max,
+		        MIN (T .keyvalue) as v_min,
+		        T .uuid,
+		        T .item,
+		        T .restype
+	       FROM ipm_pfm_value2history T
+		   WHERE collecttime > :STARTTIME AND
+		      collecttime <= :ENDTIME AND 
+		      EXISTS(SELECT 1 FROM cmdb_cloud_server2vm vm WHERE vm.uuid = t.uuid AND vm.belongcas = :BELCAS)
+		   GROUP BY T .uuid, T .item, T .restype
+        ]]>
+    </sql-query>
+
+	<!--查询公网ip可分配的设备id-->
+	<sql-query name = "query.floatingip.allocation.portid">
+		<![CDATA[
+            SELECT
+				allip.port_id
+			FROM
+				iyun_vdc_ipallocations allip
+			WHERE
+				allip.subnet_id IN (
+					SELECT
+						subnet. ID
+					FROM
+						iyun_vdc_subnet subnet
+					WHERE
+						subnet.network_id IN (
+							SELECT
+								network. ID
+							FROM
+								iyun_vdc_network network
+							WHERE
+								network.route_id IN (
+									(
+										SELECT
+											port.device_id
+										FROM
+											iyun_vdc_ports port
+										WHERE
+											port.device_owner = 'network:router_gateway'
+										AND port. ID IN (
+											SELECT
+												ip.port_id
+											FROM
+												iyun_vdc_ipallocations ip
+											WHERE
+												ip.subnet_id = (
+													SELECT
+														sub. ID
+													FROM
+														iyun_vdc_subnet sub
+													WHERE
+														sub.network_id = :networkId
+												)
+										)
+									)
+								)
+						)
+				)
+            AND allip.port_id NOT IN (
+                SELECT
+                    fip.fixed_port_id
+                FROM
+                    iyun_neutron_floatingips fip
+                WHERE
+                    fip.fixed_port_id IS NOT NULL
+            )
+        ]]>
+	</sql-query>
+
+	<!--查询主机池底下租户信息-->
+	<sql-query name = "query.hostpool.project">
+		<![CDATA[
+			SELECT
+				ID,
+				NAME
+			FROM
+				iyun_keystone_project
+			WHERE
+				"id" IN (
+					SELECT
+						vm.projectid
+					FROM
+						iyun_nova_vm vm
+					WHERE
+						vm.uuid IN (
+							SELECT
+								ser.uuid
+							FROM
+								cmdb_cloud_server2vm ser
+							WHERE
+								ser.hostid IN (
+									SELECT
+										s2o."id"
+									FROM
+										cmdb_cap_server2ovelflow s2o
+									WHERE
+										s2o.poolid = :poolId
+								)
+						)
+				)
+        ]]>
+	</sql-query>
+
+	<!--查询CVK底下租户信息-->
+	<sql-query name = "query.server2ove.project">
+		<![CDATA[
+			SELECT
+				ID,
+				NAME
+			FROM
+				iyun_keystone_project
+			WHERE
+				"id" IN (
+					SELECT
+						vm.projectid
+					FROM
+						iyun_nova_vm vm
+					WHERE
+						vm.uuid IN (
+							SELECT
+								ser.uuid
+							FROM
+								cmdb_cloud_server2vm ser
+							WHERE
+								ser.hostid = :hostId
+						)
+				)
+        ]]>
+	</sql-query>
+
+	<!--查询CVK底下租户信息-->
+	<sql-query name = "query.vlb.member.port">
+		<![CDATA[
+			SELECT
+				vm.id AS id,
+				ip.ip_address AS ipaddress,
+				vm.hostname
+			FROM
+				iyun_vdc_ports port
+			LEFT JOIN iyun_vdc_ipallocations ip ON port. ID = ip.port_id
+			LEFT JOIN iyun_nova_vm vm ON vm.uuid = port.device_id
+			WHERE
+				port.device_owner LIKE '%compute%'
+			AND ip.subnet_id = :subnetId
+        ]]>
+	</sql-query>
+
+	<!--查询云主机某个可用域底下已定价规格信息-->
+	<sql-query name = "query.priced.vm.flavor">
+		<![CDATA[
+			SELECT
+				li.flavorid AS flavorid
+			FROM
+				iyun_product_listprice li
+			WHERE
+				li.azoneid = :azoneId
+			AND li.classid = '1'
+        ]]>
+	</sql-query>
+
+	<!--查询云主机某个可用域底下未定价规格信息-->
+	<sql-query name = "query.unpriced.vm.flavor">
+		<![CDATA[
+			SELECT
+				fl. ID AS flavorid
+			FROM
+				iyun_nova_flavor fl
+			WHERE
+				fl. ID NOT IN (
+					SELECT
+						li.flavorid
+					FROM
+						iyun_product_listprice li
+					WHERE
+						li.azoneid = :azoneId
+					AND li.classid = '1'
+				)
+        ]]>
+	</sql-query>
+
+	<!--查询云主机公网ip-->
+	<sql-query name = "query.vm.public.ip">
+		<![CDATA[
+			SELECT
+				ip.floating_ip_address AS ip
+			FROM
+				iyun_neutron_floatingips ip
+			WHERE
+				ip.fixed_port_id IN (
+					SELECT
+						port. ID
+					FROM
+						iyun_vdc_ports port
+					WHERE
+						port.device_id = :uuid
+				)
+        ]]>
+	</sql-query>
+
+	<!--查询云主机私网ip-->
+	<sql-query name = "query.vm.private.ip">
+		<![CDATA[
+			SELECT
+				ip.ip_address AS ip
+			FROM
+				iyun_vdc_ipallocations ip
+			WHERE
+				ip.port_id IN (
+					SELECT
+						pt. ID
+					FROM
+						iyun_vdc_ports pt
+					WHERE
+						pt.device_id = :uuid
+				)
+        ]]>
+	</sql-query>
+
+	<!--根据网络名称查询网卡-->
+	<sql-query name = "query.port.by.network.name">
+		<![CDATA[
+			SELECT
+				newport.portid
+			FROM
+				(
+					SELECT
+						sub. ID,
+						net. ID AS netid
+					FROM
+						iyun_vdc_subnet sub
+					LEFT JOIN iyun_vdc_network net ON sub.network_id = net. ID
+					WHERE
+						net.name LIKE :networkName
+				) AS newsub
+			LEFT JOIN (
+				SELECT
+					port.id AS portid,
+					ip.subnet_id AS subid
+				FROM
+					iyun_vdc_ports port
+				LEFT JOIN iyun_vdc_ipallocations ip ON ip.port_id = port.id
+			) AS newport ON newsub. ID = newport.subid
+			WHERE newport.portid IS NOT NULL
+        ]]>
+	</sql-query>
+
+	<!--查询租户的私网ip-->
+	<sql-query name = "query.tenant.private.ip">
+		<![CDATA[
+			SELECT
+				ip.ip_address AS ip
+			FROM
+				iyun_vdc_ipallocations ip
+			WHERE
+				EXISTS (
+					SELECT
+						pt. ID
+					FROM
+						iyun_vdc_ports pt
+					WHERE
+						pt.device_id IS NOT NULL
+					AND pt.device_owner LIKE '%compute%'
+					AND pt.tenant_id = :tenantId
+					AND pt. ID = ip.port_id
+				)
+			ORDER BY
+				ip.ip_address
+			LIMIT :pageSize OFFSET :count
+        ]]>
+	</sql-query>
+
+
+	<!--查询租户的私网ip数量-->
+	<sql-query name = "query.tenant.private.ip.count">
+		<![CDATA[
+			SELECT
+				count(*)
+			FROM
+				iyun_vdc_ipallocations ip
+			WHERE
+				EXISTS (
+					SELECT
+						pt. ID
+					FROM
+						iyun_vdc_ports pt
+					WHERE
+						pt.device_id IS NOT NULL
+					AND pt.device_owner LIKE '%compute%'
+					AND pt.tenant_id = :tenantId
+					AND pt. ID = ip.port_id
+				)
+        ]]>
+	</sql-query>
+
+	<!-- 根据触发器查询归属信息 -->
+	<sql-query name = "query.trigger.owner">
+		<![CDATA[
+			SELECT h.owner, h.tenantid FROM ipm_pft_hosts h
+			WHERE EXISTS (SELECT 1 FROM ipm_pft_items i WHERE h.hostid = i.hostid AND
+				EXISTS (SELECT 1 FROM ipm_pft_functions f
+					WHERE f.triggerid = :triggerid AND f.itemid = i.itemid
+				)
+			);
+        ]]>
+	</sql-query>
+
+	<!-- 查询计费明细的扣费流水账单 -->
+	<sql-query name = "query.measure.bill">
+		<![CDATA[
+			SELECT
+				bill.id AS id,
+				bill.instanceid AS "instanceId",
+				bill.measureid AS "measureId",
+				bill.myear AS myear,
+				bill.mmonth AS mmonth,
+				bill.mday AS mday,
+				bill.num AS num,
+				bill.amount AS amount,
+				bill.bilingdate AS "billDate",
+				bill.bilingtype AS "billType",
+				bill.createdby AS "createdBy",
+				bill.createddate AS "createdDate",
+				bill.updatedby AS "updatedBy",
+				bill.updateddate AS "updatedDate"
+			FROM
+				iyun_instance_bilings bill
+			WHERE
+				bill.measureid = :measureId
+			ORDER BY
+				bill.bilingdate DESC
+			LIMIT 1;
+        ]]>
+	</sql-query>
+
+	<!-- 查询服务器加入监控的默认模板 -->
+	<sql-query name = "query.host.template">
+		<![CDATA[
+			SELECT
+				tem.*
+			FROM
+				ipm_pft_templates tem
+			WHERE
+				(
+					SELECT
+						string_agg (app. NAME, ',')
+					FROM
+						ipm_pft_applications app
+					WHERE
+						app.templateid = tem.templateid
+					AND app.hostid ISNULL
+				) LIKE :os
+			AND (
+				SELECT
+					string_agg (app. NAME, ',')
+				FROM
+					ipm_pft_applications app
+				WHERE
+					app.templateid = tem.templateid
+				AND app.hostid ISNULL
+			) LIKE :interfaceType
+			LIMIT 1;
+        ]]>
+	</sql-query>
+
+	<!-- 查询服务器加入监控的默认模板 -->
+	<sql-query name = "query.netflow.group">
+		<![CDATA[
+			SELECT
+				SUM (T . VALUE) AS total,
+				T . type,
+				T .vassetid
+			FROM
+				iyun_netflow_originals T
+			WHERE
+				T .collecttime >= :startDate
+			AND T .collecttime <= :endDate
+			GROUP BY
+				T . TYPE,
+				T .vassetid
+        ]]>
+	</sql-query>
+
+	<!-- 查询服务器加入监控的默认模板 -->
+	<sql-query name = "query.netflow.tenantid.group">
+		<![CDATA[
+			SELECT
+				SUM (T . VALUE) AS total,
+				T .vassetid
+			FROM
+				iyun_netflow_originals T
+			WHERE
+				T .collecttime >= :startDate
+			AND T .collecttime <= :endDate
+			AND T .vassetid = :tenantId
+			GROUP BY
+				T .vassetid
+        ]]>
+	</sql-query>
+
+</hibernate-mapping>

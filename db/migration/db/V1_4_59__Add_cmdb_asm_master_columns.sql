@@ -1,0 +1,12 @@
+ALTER TABLE "public".cmdb_asm_master ADD ncpu INT4;
+ALTER TABLE "public".cmdb_asm_master ADD ncore INT4;
+ALTER TABLE "public".cmdb_asm_master ADD ram INT4;
+ALTER TABLE "public".cmdb_asm_master ADD memtotal INT4;
+ALTER TABLE "public".cmdb_asm_master ADD ndisks INT4;
+ALTER TABLE "public".cmdb_asm_master ADD disktotal INT4;
+ALTER TABLE "public".cmdb_asm_master ADD npower INT4;
+ALTER TABLE "public".cmdb_asm_master ADD pkws INT4;
+ALTER TABLE "public".cmdb_asm_master ADD switchport INT4;
+ALTER TABLE "public".cmdb_asm_master ADD comefromprj varchar(36);
+ALTER TABLE "public".cmdb_asm_master ADD uptime TIMESTAMP;
+ALTER TABLE "public".cmdb_asm_master ADD downtime TIMESTAMP;

@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+
+	<bean id="synAzoneQuartzJob" class="com.h3c.iclouds.quartz.AzoneQuartz"/>
+	<bean id="synAzoneQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="synAzoneQuartzJob"/>
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>get</value>
+		</property>
+	</bean>
+	<bean id="synAzoneQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="synAzoneQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过60分钟 -->
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="novaFlavorQuartzJob" class="com.h3c.iclouds.quartz.NovaFlavorQuartz"/>
+	<bean id="novaFlavorQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="novaFlavorQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>get</value>
+		</property>
+	</bean>
+	<bean id="novaFlavorQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="novaFlavorQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过60分钟 -->
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="imageQuartzJob" class="com.h3c.iclouds.quartz.ImageQuartz"/>
+	<bean id="imageQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="imageQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>get</value>
+		</property>
+	</bean>
+	<bean id="imageQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="imageQuartzTask"/>
+		</property>
+		<property name="cronExpression">
+			<!-- 每过60分钟 yixiugai -->
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 系统资源监测,间隔：30分钟 -->
+	<bean id="checkSystemQuartzJob" class="com.h3c.iclouds.quartz.CheckQuartz"/>
+	<bean id="checkSystemQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="checkSystemQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>check</value>
+		</property>
+	</bean>
+	<bean id="checkSystemQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="checkSystemQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过30分钟 -->
+			<value>0 0/30 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 系统资源监测,间隔：30分钟 -->
+	<bean id="synNovaVmQuartzJob" class="com.h3c.iclouds.quartz.NovaVmQuartz"/>
+	<bean id="synNovaVmQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="synNovaVmQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>syn</value>
+		</property>
+	</bean>
+	<bean id="synNovaVmQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="synNovaVmQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过30分钟 -->
+			<value>0 0/30 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 主机池模块同步任务 -->
+	<bean id="hostPoolQuartzJob" class="com.h3c.iclouds.quartz.HostPoolQuartz"/>
+	<bean id="hostPoolQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="hostPoolQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>synchronization</value>
+		</property>
+	</bean>
+	<bean id="hostPoolQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="hostPoolQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过10分钟 -->
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 存储模块同步任务 -->
+	<bean id="storageQuartzJob" class="com.h3c.iclouds.quartz.StorageQuartz"/>
+	<bean id="storageQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="storageQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>synchronization</value>
+		</property>
+	</bean>
+	<bean id="storageQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="storageQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过10分钟 -->
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 云资源指标数据同步任务 -->
+	<bean id="vmPfmQuartzJob" class="com.h3c.iclouds.quartz.VmPfmQuartz"/>
+	<bean id="vmPfmQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="vmPfmQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>synchronization</value>
+		</property>
+	</bean>
+	<bean id="vmPfmQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="vmPfmQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过5分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 配额更新程序 -->
+	<bean id="dataCompareQuartzJob" class="com.h3c.iclouds.quartz.DataCompareQuartz"/>
+	<bean id="dataCompareQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="dataCompareQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>task</value>
+		</property>
+	</bean>
+	<bean id="dataCompareQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dataCompareQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每天23时触发 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 容量管理-日报表 -->
+	<bean id="dailyReportQuartzJob" class="com.h3c.iclouds.quartz.DailyReportQuartz"/>
+	<bean id="dailyReportQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="dailyReportQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>sendMail</value>
+		</property>
+	</bean>
+	<bean id="dailyReportQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dailyReportQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每天0时触发 -->
+			<value>0 0 0 * * ? </value>
+		</property>
+	</bean>
+
+	<!-- snmp同步网络设备 -->
+	<bean id="networkAssetQuartzJob" class="com.h3c.iclouds.quartz.NetworkAssetQuartz"/>
+	<bean id="networkAssetQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="networkAssetQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>startQuartz</value>
+		</property>
+	</bean>
+	<bean id="networkAssetQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="networkAssetQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过5分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 自动扣费流水账单记录 -->
+	<bean id="billQuartzJob" class="com.h3c.iclouds.quartz.BillQuartz"/>
+	<bean id="billQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="billQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>calculate</value>
+		</property>
+	</bean>
+	<bean id="billQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="billQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每月1号 -->
+			<value>0 0 0 1 * ?</value>
+		</property>
+	</bean>
+
+	<!-- snmp同步网络设备 -->
+	<bean id="networkFlowQuartzJob" class="com.h3c.iclouds.quartz.NetworkFlowQuartz"/>
+	<bean id="networkFlowQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="networkFlowQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>task</value>
+		</property>
+	</bean>
+	<bean id="networkFlowQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="networkFlowQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过5分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- snmp同步网络设备 -->
+	<bean id="healthyQuartzJob" class="com.h3c.iclouds.quartz.HealthyQuartz"/>
+	<bean id="healthyQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="healthyQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>task</value>
+		</property>
+	</bean>
+	<bean id="healthyQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="healthyQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过5分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 同步虚拟防火墙数据 -->
+	<bean id="vfwQuartzJob" class="com.h3c.iclouds.quartz.VfwQuartz"/>
+	<bean id="vfwQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="vfwQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>task</value>
+		</property>
+	</bean>
+	<bean id="vfwQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="vfwQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过10分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+		<!-- （*）资源租期过期提醒 -->
+	<bean id="remindQuartzJob" class="com.h3c.iclouds.quartz.RemindQuartz"/>
+	<bean id="remindQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="remindQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>begin</value>
+		</property>
+	 </bean>
+	
+	
+	
+	<!-- 资源租期 数据同步任务 -->
+	<bean id="renewalQuartzJob" class="com.h3c.iclouds.quartz.RenewalQuartz"/>
+	<bean id="renewalQuartzTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject">
+			<ref bean="renewalQuartzJob" />
+		</property>
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod">
+			<value>synchronization</value>
+		</property>
+	</bean>
+	<bean id="renewalQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="renewalQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过3分钟 -->
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- *资源租期过期提醒 -->
+   <bean id="remindQuartzTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="remindQuartzTask" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每过3分钟 -->
+			<value>0 0/3 * * * ?</value><!-- 0 15 10 * * ? *  "每天早上10：15"  0 0 1 * * ? "每天凌晨1点执行一次"-->
+<!-- 			<value>0 0 1 * * ?</value> -->
+		</property>
+	</bean>
+	
+	<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+	<bean id="startQuertz" lazy-init="false" autowire="default" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="synAzoneQuartzTaskTime"/>
+				<ref bean="novaFlavorQuartzTaskTime"/>
+				<ref bean="imageQuartzTaskTime"/>
+				<ref bean="checkSystemQuartzTaskTime"/>
+				<ref bean="synNovaVmQuartzTaskTime"/>
+				<ref bean="dataCompareQuartzTaskTime"/>
+				<ref bean="storageQuartzTaskTime"/>
+				<ref bean="dailyReportQuartzTaskTime"/>
+				<ref bean="hostPoolQuartzTaskTime"/>
+				<ref bean="networkAssetQuartzTaskTime"/>
+				<ref bean="vmPfmQuartzTaskTime"/>
+				<ref bean="billQuartzTaskTime"/>
+				<ref bean="networkFlowQuartzTaskTime"/>
+<!-- 				<ref bean="vfwQuartzTaskTime"/> -->
+				<ref bean="healthyQuartzTaskTime"/>
+				<ref bean="renewalQuartzTaskTime"/>
+				<ref bean="remindQuartzTaskTime"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

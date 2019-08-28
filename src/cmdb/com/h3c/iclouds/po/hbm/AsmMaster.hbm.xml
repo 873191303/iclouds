@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.AsmMaster" table="cmdb_asm_master">
+		<id name="id" type="string">
+			<column name="id" length="36" />
+			<generator class="uuid.hex" />
+		</id>
+		<property name="assetId" type="string">
+			<column name="assetId" length="36" />
+		</property>
+		<property name="serial" type="string">
+			<column name="serial" length="100" />
+		</property>
+		<property name="assetName" type="string" update="false">
+			<column name="assetName" length="100" />
+		</property>
+		<property name="assetType" type="string" update="false">
+			<column name="assetType" length="36" />
+		</property>
+		<property name="assMode" type="string">
+			<column name="assMode" length="36" />
+		</property>
+		<property name="depart" type="string">
+			<column name="depart" length="50" />
+		</property>
+		<property name="assetUser" type="string">
+			<column name="assetUser" length="36" />
+		</property>
+		<property name="assUser" type="string">
+			<column name="assUser" length="36" />
+		</property>
+		<property name="sysUser" type="string">
+			<column name="sysUser" length="36" />
+		</property>
+		<property name="userId" type="string">
+			<column name="userId" length="36" />
+		</property>
+		<property name="useFlag" type="string">
+			<column name="useFlag" length="50" />
+		</property>
+		<property name="os" type="string">
+			<column name="os" length="50" />
+		</property>
+		<property name="provide" type="string">
+			<column name="provide" length="50" />
+		</property>
+		<property name="parentId" type="string">
+			<column name="parentId" length="50" />
+		</property>
+		<property name="status" type="string">
+			<column name="status" length="100" />
+		</property>
+		<property name="mmac" type="string">
+			<column name="mmac" length="100" />
+		</property>
+		<property name="iloIP" type="string">
+			<column name="iloIP" length="100" />
+		</property>
+		<property name="begDate" type="timestamp">
+			<column name="begDate" />
+		</property>
+		<property name="endDate" type="timestamp">
+			<column name="endDate" />
+		</property>
+		<property name="lifeYears" type="double">
+			<column name="lifeYears" />
+		</property>
+		<property name="retirementDate" type="timestamp">
+			<column name="retirementDate" />
+		</property>
+		<property name="remark" type="string">
+			<column name="remark" length="600" />
+		</property>
+		<property name="ncpu" type="integer">
+			<column name="ncpu" length="32" />
+		</property>
+		<property name="ncore" type="integer">
+			<column name="ncore" length="32" />
+		</property>
+		<property name="ram" type="integer">
+			<column name="ram" length="32" />
+		</property>
+		<property name="memTotal" type="integer">
+			<column name="memtotal" length="32" />
+		</property>
+		<property name="ndisks" type="integer">
+			<column name="ndisks" length="32" />
+		</property>
+		<property name="diskTotal" type="integer">
+			<column name="disktotal" length="32" />
+		</property>
+		<property name="npower" type="integer">
+			<column name="npower" length="32" />
+		</property>
+		<property name="pkws" type="integer">
+			<column name="pkws" length="32" />
+		</property>
+		<property name="switchPort" type="integer">
+			<column name="switchport" length="32" />
+		</property>
+		<property name="comeFromPrj" type="string">
+			<column name="comefromprj" length="36" />
+		</property>
+		<property name="upTime" type="timestamp">
+			<column name="uptime" />
+		</property>
+		<property name="downTime" type="timestamp">
+			<column name="downtime"/>
+		</property>
+		<property name="groupId" type="string">
+			<column name="groupId" length="36" />
+		</property>
+		<property name="tenantId" type="string">
+			<column name="tenantid" length="100" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="assetTypeName" type="string" formula="(select t.codeName from iyun_base_initcode t where t.id = assetType)"/>
+		<property name="assetTypeCode" type="string" formula="(select t.codeId from iyun_base_initcode t where t.id = assetType)"/>
+		<property name="departName" type="string" formula="(select t.deptName from iyun_sm_department t where t.id = depart)"/>
+		<property name="assetUserName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = assetUser)"/>
+		<property name="assUserName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = assUser)"/>
+		<property name="sysUserName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = sysUser)"/>
+		<property name="userIdName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = userId)"/>
+		<property name="modeName" type="string" formula="(select t.itemname from cmdb_asm_class2items t where t.id = assMode)"/>
+		<property name="stackId" type="string" formula="(select t.stackId from cmdb_asm_stack t where t.mid = id)"/>
+		<property name="count" type="integer" formula="(select count(ho.*) from ipm_pft_hosts ho where ho.uuid = id)"/>
+		<set name="asset2Drawers" lazy="true" cascade="delete" inverse="true">
+			<key column="id"></key>
+			<one-to-many class="com.h3c.iclouds.po.Asset2Drawer" />
+		</set>
+	</class>
+</hibernate-mapping>

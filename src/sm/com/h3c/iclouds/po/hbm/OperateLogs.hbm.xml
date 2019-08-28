@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.OperateLogs" table="iyun_sm_operateLogs">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="assigned" />
+        </id>
+        <property name="userId" type="string">
+            <column name="userId" length="36"/>
+        </property>
+        <property name="logTypeId" type="string">
+            <column name="logTypeId" length="36" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="500" />
+        </property>
+        <property name="result" type="string">
+            <column name="result" length="128" />
+        </property>
+        <property name="resourceId" type="string">
+            <column name="resourceid" length="36" />
+        </property>
+        <property name="resourceName" type="string">
+            <column name="resourcename" length="36" />
+        </property>
+        <property name="ip" type="string">
+            <column name="ip" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="userName" type="string" formula="(select u.username from iyun_sm_user u where u.id = userId)"/>
+        <property name="loginName" type="string" formula="(select u.loginname from iyun_sm_user u where u.id = userId)"/>
+        <property name="projectId" type="string" formula="(select u.projectid from iyun_sm_user u where u.id = userId)"/>
+        <property name="logTypeName" type="string" formula="(select u.description from iyun_sm_logType u where u.id = logTypeId)"/>
+    </class>
+</hibernate-mapping>

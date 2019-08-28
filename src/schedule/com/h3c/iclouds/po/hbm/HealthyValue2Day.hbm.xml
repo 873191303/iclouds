@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.HealthyValue2Day" table="iyun_healthy_value2days">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="collectTime" type="timestamp">
+            <column name="collectTime" />
+        </property>
+        <property name="instanceId" type="string" >
+            <column name="instanceId"/>
+        </property>
+        <property name="healthValue" type="double" >
+            <column name="healthValue"/>
+        </property>
+        <property name="maxSlaValue" type="double" >
+            <column name="maxSlaValue"/>
+        </property>
+        <property name="minSlaValue" type="double" >
+            <column name="minSlaValue"/>
+        </property>
+        <property name="createdDate" type="timestamp" >
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

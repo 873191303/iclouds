@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.inc.IncMaster" table="inc_req_master">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+		<property name="incNo" type="string" update="false">
+            <column name="incNo" length="50" />
+        </property>
+    	<property name="topic" type="string">
+            <column name="topic" length="100"/>
+        </property>
+        <property name="content" type="string">
+            <column name="content" length="500"/>
+        </property>
+        <property name="incType" type="string">
+            <column name="incType" length="36"/>
+        </property>
+       	<property name="causedTime" type="timestamp">
+            <column name="causedTime" />
+        </property>
+       	<property name="responsible" type="string">
+            <column name="responsible" length="36"/>
+        </property>
+        <property name="step" type="string">
+            <column name="step" length="36"/>
+        </property>
+        <property name="company" type="string">
+            <column name="company" length="36" />
+        </property>
+        <property name="customer" type="string">
+            <column name="customer" length="31006"/>
+        </property>
+        <property name="telephone" type="string">
+            <column name="telphone" length="100"/>
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="100"/>
+        </property>
+        <property name="reporter" type="string">
+            <column name="reporter" length="100"/>
+        </property>
+        <property name="fromTo" type="string">
+            <column name="fromTo" length="36"/>
+        </property>
+        <property name="ways" type="string">
+            <column name="ways" length="36"/>
+        </property>
+   		<property name="actFTime" type="timestamp">
+            <column name="actFTime" length="19"/>
+        </property>
+        <property name="reqFTime" type="timestamp">
+            <column name="reqFTime" length="19"/>
+        </property>
+        <property name="incLevel" type="string">
+            <column name="incLevel" length="36" />
+        </property>
+        <property name="rtuFlag" type="string">
+            <column name="rtuFlag" length="100" />
+        </property>
+        <property name="instanceId" type="string">
+            <column name="instanceId" length="36" />
+        </property>
+        <property name="workFlowId" type="string">
+            <column name="workFlowId" length="36" />
+        </property>
+         <property name="attachment" type="string">
+            <column name="attachment" length="100" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="50"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="responsibleName" type="string" formula="(SELECT u.loginname FROM iyun_sm_user u WHERE u.id=responsible)"/>
+        <property name="incTypeValue" type="string" formula="(select t.classname from iyun_base_prdclass t where t.id = incType)"/>
+        <property name="lasthandledate" type="string" formula="(SELECT mll.createddate from inc_req_master2approvelog mll where mll.jobid = id order by mll.createddate desc limit 1) "/>
+
+    </class>
+</hibernate-mapping>

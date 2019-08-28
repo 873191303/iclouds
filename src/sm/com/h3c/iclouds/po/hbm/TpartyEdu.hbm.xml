@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.TpartyEdu" table="iyun_tparty_edu">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="eduCode">
+            <column name="educode" sql-type="varchar(36)" length="36" not-null="true"/>
+        </property>
+        <property name="eduName">
+            <column name="eduname" sql-type="varchar(36)" length="36" not-null="true"/>
+        </property>
+        <property name="projectId">
+            <column name="projectid" sql-type="varchar(64)" length="64" not-null="true"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="char" not-null="true"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <property name="createdByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = CreatedBy)"/>
+        <property name="updatedByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = UpdatedBy)"/>
+        <property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = projectid)"/>
+    </class>
+</hibernate-mapping>

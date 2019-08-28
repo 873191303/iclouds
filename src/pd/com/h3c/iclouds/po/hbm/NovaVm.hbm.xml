@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.NovaVm" table="iyun_nova_vm">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		 <!-- XML格式的version属性映射必须立即放在标示符属性映射之后 -->  
+    	<!-- <version name="version" access="field" column="version" /> -->
+		<property name="uuid" type="string">
+			<column name="uuid" length="36" />
+		</property>
+		<property name="host" type="string">
+			<column name="host" length="255"/>
+		</property>
+		<property name="hostName" type="string">
+			<column name="hostName" length="255" />
+		</property>
+		<property name="vcpus" type="int">
+			<column name="vcpus" length="4" />
+		</property>
+		<property name="memory" type="int">
+			<column name="memory" length="4" />
+		</property>
+		<property name="ramdisk" type="int">
+			<column name="ramdisk" length="4" />
+		</property>
+		<property name="vmState" type="string">
+			<column name="vmState" length="255" />
+		</property>
+		<property name="powerState" type="int">
+			<column name="powerState" length="4" />
+		</property>
+		<property name="flavorId" type="string">
+			<column name="flavorId" length="50" />
+		</property>
+		<property name="osType" type="string">
+			<column name="osType" length="64" />
+		</property>
+		<property name="imageRef" type="string">
+			<column name="image_ref" length="255" />
+		</property>
+		<property name="azoneId" type="string">
+			<column name="azoneId" length="128" />
+		</property>
+		<property name="projectId" type="string">
+			<column name="projectId" length="64" />
+		</property>
+		<property name="owner" type="string">
+			<column name="owner" length="36" />
+		</property>
+		<property name="manageIp" type="string">
+			<column name="manageip" length="36" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="ownerName" type="string" formula="(SELECT u.loginname FROM iyun_sm_user u WHERE u.id=owner)"/>
+		<property name="projectName" type="string" formula="(SELECT u.name FROM iyun_keystone_project u WHERE u.id=projectId)"/>
+		<property name="imageName" type="string" formula="(SELECT u.osmirname FROM iyun_base_images u WHERE u.id=image_ref)"/>
+	</class>
+</hibernate-mapping>

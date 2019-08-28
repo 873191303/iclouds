@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Software" table="cmdb_asm_sware">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="scode" type="string">
+            <column name="scode" length="36"/>
+        </property>
+        <property name="shortName" type="string">
+            <column name="shortName" length="50"/>
+        </property>
+        <property name="sname" type="string">
+            <column name="sname" length="200"/>
+        </property>
+        <property name="softwareVersion" type="string">
+            <column name="softwareVersion" length="50"/>
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="50"/>
+        </property>
+        <property name="sowner" type="string">
+            <column name="sowner" length="50"/>
+        </property>
+        <property name="position" type="string">
+            <column name="position" length="50"/>
+        </property>
+        <property name="totalAuth" type="integer">
+            <column name="totalAuth" />
+        </property>
+        <property name="totalUser" type="integer">
+            <column name="totalUser" />
+        </property>
+        <property name="releaseDate" type="timestamp">
+            <column name="releaseDate"/>
+        </property>
+        <property name="stype" type="string" update="false">
+            <column name="stype" length="50"/>
+        </property>
+        <property name="supId" type="string">
+            <column name="supId" length="500"/>
+        </property>
+        <property name="patch" type="string">
+            <column name="patch" length="500"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="500"/>
+        </property>
+        
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="stypeName" formula="(SELECT item.itemname FROM cmdb_asm_class2items item WHERE item.id=stype)"/>
+    </class>
+</hibernate-mapping>

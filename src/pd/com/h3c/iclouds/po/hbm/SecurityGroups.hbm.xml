@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.SecurityGroup" table="iyun_vdc_securitygroups">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="name" type="string">
+			<column name="name" length="255" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="1024" />
+		</property>
+		<property name="tenantId" type="string">
+			<column name="tenantid" length="50" />
+		</property>
+	</class>
+</hibernate-mapping>

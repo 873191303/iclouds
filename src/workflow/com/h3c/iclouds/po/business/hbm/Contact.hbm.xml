@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.Contact" table="bus_cis_contact">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="cusId" type="string" insert="false" update="false">
+            <column name="cusId" length="36"/>
+        </property>
+        <property name="cname" type="string">
+            <column name="cname" length="50"/>
+        </property>
+        <property name="sex" type="string">
+            <column name="sex" length="1"/>
+        </property>
+        <property name="age" type="integer">
+            <column name="age"/>
+        </property>
+        <property name="birthday" type="timestamp">
+            <column name="birthday" />
+        </property>
+        <property name="tel" type="string">
+            <column name="tel" length="50"/>
+        </property>
+        <property name="mobile" type="string">
+            <column name="mobile" length="50"/>
+        </property>
+        <property name="wxh" type="string">
+            <column name="wxh" length="50"/>
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="position" type="string">
+            <column name="position" length="500" />
+        </property>
+        <property name="busiScope" type="string">
+            <column name="busiScope" length="500" />
+        </property>
+        <property name="disposition" type="string">
+            <column name="disposition" length="500" />
+        </property>
+        <property name="interest" type="string">
+            <column name="interest" length="500" />
+        </property>
+        <property name="owner" type="string">
+            <column name="owner" length="36" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="GroupID" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <many-to-one name="custom" class="com.h3c.iclouds.po.business.Custom" fetch="select">
+        	<column name="cusId"></column>
+		</many-to-one>
+    </class>
+</hibernate-mapping>

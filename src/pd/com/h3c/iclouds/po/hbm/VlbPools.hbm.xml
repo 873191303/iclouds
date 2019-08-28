@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.VlbPool" table="iyun_vlb_pools">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="name" type="string">
+			<column name="name" length="255" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="255" />
+		</property>
+		<property name="protocol" type="string" update="false">
+			<column name="protocol" length="255"/>
+		</property>
+		<property name="lbMethod" type="string" update="false">
+			<column name="lb_method" length="255" />
+		</property>
+		<property name="factSubnetId" type="string" update="false">
+			<column name="fact_subnet_id" length="255"/>
+		</property>
+		<property name="vipId" type="string" update="false">
+			<column name="vip_id" length="255" />
+		</property>
+		<property name="adminStateUp" type="boolean">
+			<column name="admin_state_up" />
+		</property>
+		<property name="status" type="string">
+			<column name="status" length="16" />
+		</property>
+		<property name="statusDescription" type="string">
+			<column name="status_descrition" length="255" />
+		</property>
+		<property name="lbId" type="string" update="false">
+			<column name="lbid" length="36" />
+		</property>
+		<property name="tenantId" type="string" update="false">
+			<column name="tenant_id" length="50" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="vdcId" type="string" formula="(SELECT vlb.vdcid FROM iyun_vdc_vlb vlb WHERE vlb.id = lbid)"/>
+		<property name="vdcName" type="string" formula="(SELECT vdc.name FROM iyun_base_vdc vdc WHERE vdc.id = (SELECT vlb.vdcid FROM iyun_vdc_vlb vlb WHERE vlb.id = lbid))"/>
+		<property name="lbName" type="string" formula="(SELECT vlb.name FROM iyun_vdc_vlb vlb WHERE vlb.id = lbid)"/>
+		<property name="protocolPort" type="int" formula="(SELECT vip.protocol_port FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="portName" type="string" formula="(SELECT port.name FROM iyun_vdc_ports port WHERE port.id = (SELECT vip.port_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id))"/>
+		<property name="connectionLimit" type="int" formula="(SELECT vip.commection_limit FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="delay" type="int" formula="(SELECT hea.delay FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="type" type="string" formula="(SELECT hea.type FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="timeout" type="int" formula="(SELECT hea.timeout FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="maxRetries" type="int" formula="(SELECT hea.max_retries FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="httpMethod" type="string" formula="(SELECT hea.http_method FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="urlPath" type="string" formula="(SELECT hea.url_path FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="expectedCodes" type="string" formula="(SELECT hea.expected_Codes FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorId FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolid = id))"/>
+		<property name="portId" type="string" formula="(SELECT vip.port_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="portCdId" type="string"
+				  formula="(SELECT port.cloudos_id FROM iyun_vdc_ports port WHERE port.id = (SELECT vip.port_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id))"/>
+		<property name="hmonitorId" type="string" formula="(SELECT p2h.hmonitorid FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolId = id)"/>
+		<property name="hmonitorCloudId" type="string" formula="(SELECT hea.cloudos_id FROM iyun_vlb_healthMonitors hea WHERE hea.id = (SELECT p2h.hmonitorid FROM iyun_vlb_pool2healthmonitors p2h WHERE p2h.poolId = id))"/>
+		<property name="vip" type="string" formula="(SELECT vip.vip_address FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="vipCloudId" type="string" formula="(SELECT vip.cloudos_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="uuid" type="string" formula="(SELECT item.uuid FROM iyun_vdc_items item WHERE item.id = id)"/>
+		<property name="cookieType" type="string" formula="(SELECT vip.cookie_type FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="cookieName" type="string" formula="(SELECT vip.cookie_name FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="vainSubnetId" type="string" formula="(SELECT vip.vain_subnet_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id)"/>
+		<property name="lbCloudosId" type="string" formula="(SELECT lb.cloudos_id FROM iyun_vdc_vlb lb WHERE lb.id = lbid)"/>
+		<property name="fsCloudosId" type="string" formula="(SELECT sub.cloudos_id FROM iyun_vdc_subnet sub WHERE sub.id = fact_subnet_id)"/>
+		<property name="fsCidr" type="string" formula="(SELECT sub.cidr FROM iyun_vdc_subnet sub WHERE sub.id = fact_subnet_id)"/>
+		<property name="vsCidr" type="string" formula="(SELECT sub.cidr FROM iyun_vdc_subnet sub WHERE sub.id = (SELECT vip.vain_subnet_id FROM iyun_vlb_vips vip WHERE vip.id = vip_id ))"/>
+		<property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = tenant_id)"/>
+	</class>
+</hibernate-mapping>

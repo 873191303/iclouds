@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Asset2Drawer" table="cmdb_asm_asset2drawer">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="assigned" />
+        </id>
+        <property name="drawsId" type="string">
+            <column name="drawsId" length="36"/>
+        </property>
+        <property name="unumb" type="integer">
+            <column name="unumb" />
+        </property>
+        <property name="remark" type="string" >
+            <column name="remark" length="600" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <property name="rowNum" type="integer" formula="(select t.rowNum from cmdb_dc_draws t where t.id = drawsId)"/>
+        <property name="colNum" type="integer" formula="(select t.colNum from cmdb_dc_draws t where t.id = drawsId)"/>
+        
+        <property name="roomName" type="string" formula="(select t.roomName from cmdb_dc_rooms t where t.id = (select d.roomId from cmdb_dc_draws d where d.id = drawsId limit 1))"/>
+		<property name="roomId" type="string" formula="(select d.roomId from cmdb_dc_draws d where d.id = drawsId limit 1)"/>
+        <property name="unum" type="int"
+                  formula="(select c2i.Unum from cmdb_asm_class2Items c2i where c2i.id = (select master.assMode from cmdb_asm_master master where master.id = id))"/>
+
+		<many-to-one name="draws" class="com.h3c.iclouds.po.Draws" lazy="no-proxy" insert="false" update="false">
+           <column name="drawsId"></column>
+		</many-to-one>
+		<many-to-one name="asmMaster" class="com.h3c.iclouds.po.AsmMaster" lazy="no-proxy" insert="false" update="false">
+           <column name="id"></column>
+		</many-to-one>
+    </class>
+</hibernate-mapping>

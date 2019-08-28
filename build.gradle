@@ -1,0 +1,40 @@
+group 'com.h3c.iclouds'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+project.webAppDirName = 'WebContent'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/auth', 'src/base', 'src/cloudos', 'src/cmdb', 'src/eisso', 
+            'src/isso', 'src/pd', 'src/queen', 'src/schedule', 'src/sm', 'src/sso',
+            'src/syncdata', 'src/workFlow']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test']
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.apache.tomcat:tomcat-api:8.0.36'
+    //compile fileTree(dir: 'src/main/webapp/WEB-INF/lib', include: '*.jar')
+    compile fileTree(dir: 'WebContent/WEB-INF/lib', include: '*.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+war {
+    exclude 'WEB-INF/lib/**'
+}
+

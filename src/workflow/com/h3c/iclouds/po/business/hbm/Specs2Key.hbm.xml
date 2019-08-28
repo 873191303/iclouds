@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.business.Specs2Key" table="iyun_product_specs2key">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="classId" update="false">
+            <column name="classid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="keyName" update="false">
+            <column name="keyname" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="unit" update="false">
+            <column name="unit" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="key">
+            <column name="key" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="validate">
+            <column name="validate" sql-type="varchar(200)" length="200"/>
+        </property>
+        <property name="dataType">
+            <column name="datatype" sql-type="varchar(1)" length="1"/>
+        </property>
+        <property name="isMust">
+            <column name="ismust" sql-type="varchar(1)" length="1"/>
+        </property>
+        <property name="isShow">
+            <column name="isshow" sql-type="varchar(1)" length="1"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <set name="values" table="iyun_product_specs2keyvalue" lazy="false" cascade="none" inverse="true">
+            <key column="key"></key>
+            <one-to-many class="com.h3c.iclouds.po.business.Specs2KeyValue"/>
+        </set>
+    </class>
+</hibernate-mapping>

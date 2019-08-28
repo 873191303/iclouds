@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="iclouds">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/auth"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/base"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/schedule"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sm"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/cmdb"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/pd"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/cloudos"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/queen"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/db/migration"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/syncdata"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/workflow"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/eisso"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sso"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/core"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/third-interface"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/monitor"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sdn"/>
+        <property name="java-output-path" value="/iclouds/build/classes"/>
+        <property name="context-root" value="iclouds"/>
+    </wb-module>
+</project-modules>

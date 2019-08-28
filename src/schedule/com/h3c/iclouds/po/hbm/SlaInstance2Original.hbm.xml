@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.SlaInstance2Original" table="iyun_sla_instance2originals">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="collectTime" type="timestamp">
+            <column name="collectTime" />
+        </property>
+        <property name="instanceId" type="string" >
+            <column name="instanceId"/>
+        </property>
+        <property name="itemId" type="string" >
+            <column name="itemId"/>
+        </property>
+        <property name="itemValue" type="double" >
+            <column name="itemValue"/>
+        </property>
+        <property name="weight" type="double" >
+            <column name="weight"/>
+        </property>
+        <property name="tenantId" type="string" >
+            <column name="tenantId"/>
+        </property>
+        <property name="createdDate" type="timestamp" >
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

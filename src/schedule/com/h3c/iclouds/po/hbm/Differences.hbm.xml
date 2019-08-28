@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Differences" table="auto_sync_differences">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="uuid" type="string">
+            <column name="uuid" length="50"/>
+        </property>
+        <property name="dataType" type="string">
+            <column name="dataType" length="50"/>
+        </property>
+        <property name="diffType" type="string">
+            <column name="diffType" />
+        </property>
+        <property name="taskDispatchId" type="string">
+            <column name="taskDispatchId"/>
+        </property>
+        <property name="syncDate" type="timestamp">
+            <column name="syncDate" length="50"/>
+        </property>
+        <property name="todoType" type="string">
+            <column name="todoType" />
+        </property>
+        <property name="result" type="string">
+            <column name="result" />
+        </property>
+        <property name="todoUser" type="string">
+            <column name="todoUser" length="50"/>
+        </property>
+        <property name="projectName" type="string">
+            <column name="projectName" length="50"/>
+        </property>
+        <property name="todoTime" type="timestamp">
+            <column name="todoTime"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <property name="todoUserName" type="string" formula="(SELECT u.username FROM iyun_sm_user u WHERE u.id=todoUser)"/>
+    </class>
+</hibernate-mapping>

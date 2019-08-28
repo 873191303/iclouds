@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>jsp</display-name>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/*.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<servlet>
+		<description></description>
+		<display-name>InitialServlet</display-name>
+		<servlet-name>initialServlet</servlet-name>
+		<servlet-class>com.h3c.iclouds.auth.DelegatingServletProxy</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>initialServlet</servlet-name>
+		<url-pattern>/InitialServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/Dispatcher-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Rest</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/rest-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Rest</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+    <!--
+        SSO Start
+            只拦截/sso请求，且必须是非ajax请求。
+            1.前端接受到后端接口返回状态码401
+            2.前端发起一个/sso的跳转请求，需要带uid参数，会根据uid做ip等信息的绑定
+            3.缓存后作为后续配置（失效时间为24小时），添加到重定向uri后面作为参数
+    -->
+    <!-- 该过滤器用于实现单点登出功能，可选配置。 -->
+    <filter>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <filter-class>com.h3c.iclouds.session.SingleSignOutFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <url-pattern>/sso</url-pattern>
+    </filter-mapping>
+
+    <!-- 该过滤器负责用户的认证工作，必须启用它 -->
+    <filter>
+        <filter-name>CASFilter</filter-name>
+        <filter-class>com.h3c.iclouds.authentication.AuthenticationFilter</filter-class>
+		<!-- 单点服务器地址 -->
+		<init-param>
+            <param-name>casServerLoginUrl</param-name>
+            <param-value>https://sso-test.zrx.com:18443/cas</param-value>
+        </init-param>
+        <!-- 单点登录认证回调服务器地址 -->
+        <init-param>
+            <param-name>serverName</param-name>
+            <param-value>http://10.10.241.35</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASFilter</filter-name>
+        <url-pattern>/sso</url-pattern>
+    </filter-mapping>
+
+    <!-- 该过滤器负责对Ticket的校验工作，必须启用它 -->
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>
+			com.h3c.iclouds.validation.Cas20ProxyReceivingTicketValidationFilter
+		</filter-class>
+        <!-- 单点服务器地址 -->
+        <init-param>
+            <param-name>casServerUrlPrefix</param-name>
+            <param-value>https://sso-test.zrx.com:18443/cas</param-value>
+        </init-param>
+        <!-- 单点登录认证回调服务器地址 -->
+        <init-param>
+            <param-name>serverName</param-name>
+            <param-value>http://10.10.241.35</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/sso</url-pattern>
+    </filter-mapping>
+    <!-- SSO End -->
+
+    <filter>
+		<filter-name>corsFilter</filter-name>
+		<filter-class>com.h3c.iclouds.auth.CorsFilter</filter-class>
+		<init-param>
+			<param-name>allowOrigin</param-name>
+			<param-value>*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allowMethods</param-name>
+			<param-value>GET,POST,PUT,DELETE</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allowCredentials</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allowHeaders</param-name>
+			<param-value>Content-Type,I_CLOUDS_TOKEN,PROJECT_OPE_KEY</param-value>
+		</init-param>
+		<init-param>
+			<param-name>exposeHeaders</param-name>
+			<param-value>I_CLOUDS_TOKEN</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>corsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CharacterFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<welcome-file-list>
+		<welcome-file>/jsp/login.jsp</welcome-file>
+	</welcome-file-list>
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+</web-app>

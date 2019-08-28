@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.Vlb" table="iyun_vdc_vlb">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="name" type="string">
+			<column name="name" length="50" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="500" />
+		</property>
+		<property name="status" type="int">
+			<column name="status" length="4" />
+		</property>
+		<property name="throughPut" type="int">
+			<column name="through_put" length="4" />
+		</property>
+		<property name="extra" type="string">
+			<column name="extra" length="2048" />
+		</property>
+		<property name="projectId" type="string" update="false">
+			<column name="projectid" length="64" />
+		</property>
+		<property name="vdcId" type="string" update="false">
+			<column name="vdcid" length="50" />
+		</property>
+		<property name="owner" type="string">
+			<column name="owner" length="36" />
+		</property>
+		<property name="deleted" type="string">
+			<column name="deleted" length="32" />
+		</property>
+		<property name="deleteBy" type="string">
+			<column name="deleteBy" length="36" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+	</class>
+</hibernate-mapping>

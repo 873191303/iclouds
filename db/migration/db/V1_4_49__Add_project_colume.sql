@@ -1,0 +1,1 @@
+alter table public.iyun_keystone_project add selfAllowed varchar(36) default 0;

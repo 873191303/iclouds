@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//config/base_product.properties=UTF-8
+encoding//config/cloudosApi.properties=UTF-8
+encoding//config/config.properties=UTF-8
+encoding//config/eisooApi.properties=GBK
+encoding//config/issoApi.properties=GBK
+encoding//config/message.properties=UTF-8
+encoding//config/monitorApi.properties=GBK
+encoding//config/sdnApi.properties=GBK
+encoding//config/snmpOID.properties=UTF-8
+encoding//config/zabbixApi.properties=GBK
+encoding/<project>=UTF-8

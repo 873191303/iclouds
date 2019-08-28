@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Project" table="iyun_keystone_project">
+        <id name="id" type="string">
+            <column name="id" length="64" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="64"/>
+        </property>
+        <property name="extra" type="string">
+            <column name="extra" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" />
+        </property>
+        <property name="enabled" type="boolean">
+            <column name="enabled" />
+        </property>
+        <property name="domainId" type="string">
+            <column name="domain_id" length="64"/>
+        </property>
+        <property name="parentId" type="string">
+            <column name="parent_id" length="64"/>
+        </property>
+        <property name="flag" type="integer">
+            <column name="flag" length="16"/>
+        </property>
+        <property name="cusId" type="string">
+            <column name="cusId" length="50" />
+        </property>
+         <property name="createdDate" type="timestamp">
+            <column name="createdDate"  />
+        </property>
+       	 <property name="updatedDate" type="timestamp">
+            <column name="updatedDate"  />
+        </property>
+        <property name="selfAllowed" type="string">
+            <column name="selfAllowed" length="32"/>
+        </property>
+       <set name="networks" table="iyun_quota_terant_network" lazy="true" cascade="delete" inverse="true">
+            <key column="id"></key>
+            <one-to-many class="com.h3c.iclouds.po.Project2Network"/>
+		</set>
+		<set name="quotaUseds" table="iyun_quota_terant_used" lazy="true" cascade="delete" inverse="true">
+            <key column="id"></key>
+            <one-to-many class="com.h3c.iclouds.po.QuotaUsed"/>
+		</set>
+		<property name="cusName" type="string" formula="(SELECT c.cusname FROM bus_cis_custom c WHERE c.id=cusId)"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:redis="http://www.springframework.org/schema/redis"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	   http://www.springframework.org/schema/redis  
+       http://www.springframework.org/schema/redis/spring-redis-1.0.xsd">
+
+	<description>Spring公共配置文件 </description>
+
+		<!-- 定义受环境影响易变的变量 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:/base229.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="taskReceiver" class="com.h3c.iclouds.biz.impl.TaskReceiver"/>
+	<bean id="emailReceiver" class="com.h3c.iclouds.biz.impl.EmailReceiver"/>
+	<bean id="imageTaskReceiver" class="com.h3c.iclouds.quartz.ImageTaskReceiver"/>
+	<context:component-scan base-package="com.h3c.**" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 用于持有ApplicationContext,可以使用SpringContextHolder.getBean('xxxx')的静态方法得到spring bean对象 -->
+	<bean class="com.h3c.iclouds.base.SpringContextHolder" lazy-init="false" />
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<property name="driverClassName" value="${icloud.jdbc.driver}" />
+		<property name="jdbcUrl" value="${icloud.jdbc.url}" />
+		<property name="username" value="${icloud.jdbc.username}" />
+		<property name="password" value="${icloud.jdbc.password}" />
+		<property name="maximumPoolSize" value="10" />
+		<property name="minimumIdle" value="5" />
+		<property name="connectionTestQuery" value="select 1" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="cachePrepStmts">true</prop>
+				<prop key="prepStmtCacheSize">250</prop>
+				<prop key="prepStmtCacheSqlLimit">2048</prop>
+				<prop key="useServerPrepStmts">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--<bean id="dynamicDataSource" class="com.h3c.iclouds.utils.DynamicDataSource">
+        <property name="targetDataSources">
+            &lt;!&ndash; 标识符类型 &ndash;&gt;
+            <map key-type="java.lang.String">
+                <entry key="dataSource" value-ref="dataSource"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="dataSource"/>
+    </bean>-->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>classpath:hibernate/hibernate.cfg.xml</value>
+			</list>
+		</property>
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/h3c/iclouds/po</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- <property name="defaultEncoding" value="UTF-8"/> -->
+        <!-- 指定所上传文件的总大小不能超过200KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+        <property name="maxUploadSize" value="2048000000"/>
+        <property name="resolveLazily" value="true"/>
+    </bean>
+
+	<!-- 事务定义 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="persist*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="complete*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.h3c.iclouds.biz..*.*(..))" />
+		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.h3c.iclouds.dao..*.*(..))" />
+		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.h3c.iclouds.base..*.*(..))" />
+	</aop:config>
+
+	<!-- Flyway configuration -->
+	<bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+		<property name="baselineOnMigrate" value="true" />
+		<property name="locations" value="classpath:db" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- activiti配置 -->
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource" />
+	    <property name="transactionManager" ref="transactionManager" />
+	    <property name="databaseSchemaUpdate" value="true" />
+	    <property name="jobExecutorActivate" value="false" />
+	    <property name="deploymentResources" value="classpath*:/config/workflow/*.bpmn" />
+	 
+	</bean>
+
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" /><!-- 工作流仓储服务 -->
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" /><!-- 工作流运行服务 -->
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" /><!-- 工作流任务服务 -->
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" /><!-- 工作流历史数据服务 -->
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" /><!-- 工作流管理服务 -->
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" /><!-- 工作流用户群组服务 -->
+
+	<!-- 线程池配置 -->
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" /><!-- 线程池维护线程的最少数量 -->
+		<property name="keepAliveSeconds" value="2000" /><!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="maxPoolSize" value="20" /><!-- 线程池维护线程的最大数量 -->
+		<property name="queueCapacity" value="25" /><!-- 线程池所使用的缓冲队列 -->
+	</bean>
+
+	<bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+	<!-- 连接池配置. -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 连接池中最大连接数。高版本：maxTotal，低版本：maxActive -->
+		<property name="maxTotal" value="8" />
+		<!-- 连接池中最大空闲的连接数. -->
+		<property name="maxIdle" value="4" />
+		<!-- 连接池中最少空闲的连接数. -->
+		<property name="minIdle" value="1" />
+		<!-- 当连接池资源耗尽时，调用者最大阻塞的时间，超时将跑出异常。单位，毫秒数;默认为-1.表示永不超时。高版本：maxWaitMillis，低版本：maxWait -->
+		<property name="maxWaitMillis" value="5000" />
+		<!-- 连接空闲的最小时间，达到此值后空闲连接将可能会被移除。负值(-1)表示不移除. -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<!-- 对于“空闲链接”检测线程而言，每次检测的链接资源的个数。默认为3 -->
+		<property name="numTestsPerEvictionRun" value="3" />
+		 <!-- “空闲链接”检测线程，检测的周期，毫秒数。如果为负值，表示不运行“检测线程”。默认为-1. -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- testOnBorrow:向调用者输出“链接”资源时，是否检测是有有效，如果无效则从连接池中移除，并尝试获取继续获取。默认为false。建议保持默认值. -->
+		<!-- testOnReturn:向连接池“归还”链接时，是否检测“链接”对象的有效性。默认为false。建议保持默认值.-->
+		<!-- testWhileIdle:向调用者输出“链接”对象时，是否检测它的空闲超时；默认为false。如果“链接”空闲超时，将会被移除。建议保持默认值. -->
+		<!-- whenExhaustedAction:当“连接池”中active数量达到阀值时，即“链接”资源耗尽时，连接池需要采取的手段, 默认为1(0:抛出异常。1:阻塞，直到有可用链接资源。2:强制创建新的链接资源) -->
+	</bean>
+	<!-- Spring提供的Redis连接工厂 -->
+	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy">
+		<!-- 连接池配置. -->
+		<property name="poolConfig" ref="jedisPoolConfig" />
+		<!-- Redis服务主机. -->
+		<property name="hostName" value="${icloud.redis.host}" />
+		<!-- Redis服务端口号. -->
+		<property name="port" value="6379" />
+		<!-- Redis服务连接密码. -->
+		<!-- <property name="password" value="${redis.password}" /> -->
+		<!-- 连超时设置. -->
+		<property name="timeout" value="15000" />
+		<!-- 是否使用连接池. -->
+		<property name="usePool" value="true" />
+	</bean>
+	
+	<!-- Spring提供的访问Redis类. -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+		<property name="keySerializer" ref="stringRedisSerializer" />
+		<property name="hashKeySerializer" ref="stringRedisSerializer" />
+
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+        </property>
+    </bean>
+	
+	<bean id="messageDelegateListener" class="com.h3c.iclouds.biz.impl.KeyExpireMessageListener"/>
+	
+	<bean id="listener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+        <property name="delegate" ref="messageDelegateListener" />
+    </bean>
+    
+    <redis:listener-container connection-factory="jedisConnectionFactory">
+        <redis:listener ref="listener" method="onMessage" topic="__keyevent@0__:expired" />
+    </redis:listener-container>
+</beans>

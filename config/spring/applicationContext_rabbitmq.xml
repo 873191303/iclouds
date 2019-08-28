@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/rabbit
+       http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+
+    <!-- 连接服务配置 -->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1" username="guest" password="guest" port="5672"
+                               virtual-host="/"/>
+    <rabbit:admin connection-factory="connectionFactory"/>
+    <rabbit:template exchange="my-mq-exchange" id="amqpTemplate" connection-factory="connectionFactory"/>
+
+    <!-- 任务执行 queue 队列声明 开始 -->
+    <rabbit:queue id="iyun_task_queen" durable="true" auto-delete="false" exclusive="false" name="iyun_task_queen"/>
+    <rabbit:direct-exchange name="my-mq-exchange" durable="true" auto-delete="false" id="my-mq-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="iyun_task_queen" key="iyun_task_queen"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener queues="iyun_task_queen" ref="taskReceiver"/>
+    </rabbit:listener-container>
+    <!-- 任务执行 queue 队列声明 结束 -->
+
+    <!-- 邮件发送队列声明 开始 -->
+    <rabbit:queue id="iyun_email_queen" durable="true" auto-delete="false" exclusive="false" name="iyun_email_queen"/>
+    <rabbit:direct-exchange name="my-mq-exchange" durable="true" auto-delete="false" id="my-mq-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="iyun_email_queen" key="iyun_email_queen"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener queues="iyun_email_queen" ref="emailReceiver"/>
+    </rabbit:listener-container>
+    <!-- 邮件发送队列声明 结束 -->
+
+    <!-- 邮件发送队列声明 开始 -->
+    <rabbit:queue id="iyun_task_image_queen" durable="true" auto-delete="false" exclusive="false"
+                  name="iyun_task_image_queen"/>
+    <rabbit:direct-exchange name="my-mq-exchange" durable="true" auto-delete="false" id="my-mq-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="iyun_task_image_queen" key="iyun_task_image_queen"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener queues="iyun_task_image_queen" ref="imageTaskReceiver"/>
+    </rabbit:listener-container>
+    <!-- 邮件发送队列声明 结束 -->
+
+</beans>

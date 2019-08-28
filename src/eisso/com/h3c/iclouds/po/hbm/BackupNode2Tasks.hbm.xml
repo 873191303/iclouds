@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.BackupNode2Tasks" table="iyun_partner_bakup_node2tasks">
+		<id name="taskId" type="int">
+			<column name="taskid" sql-type="bigint"/>
+			<generator class="assigned"/>
+		</id>
+		<property name="backupNodeId" type="string">
+			<column name="id" length="36" />
+		</property>
+		<property name="taskName" type="string">
+			<column name="taskname" length="255" />
+		</property>
+		<property name="taskType">
+            <column name="tasktype" sql-type="bigint"/>
+        </property>
+		<property name="dataSourceType" type="string">
+			<column name="datasourcetype" length="100" />
+		</property>
+		<property name="taskStatus" type="string">
+			<column name="taskstatus" length="50" />
+		</property>
+		<property name="taskLastResult" type="string">
+			<column name="tasklastresult" length="255" />
+		</property>
+		<property name="taskLastRunTime" type="string">
+			<column name="tasklastruntime" length="255" />
+		</property>
+		<property name="taskNextRunTime" type="string">
+			<column name="tasknextruntime" length="255" />
+		</property>
+		<property name="clientId">
+            <column name="clinetid" sql-type="bigint"/>
+        </property>
+		<property name="clientName" type="string" >
+			<column name="clientname" length="255" />
+		</property>
+		<property name="clientAddr" type="string">
+			<column name="clientaddr" length="255" />
+		</property>
+		<property name="destServerId">
+            <column name="destserverid" sql-type="bigint"/>
+        </property>
+		<property name="destServerName" type="string" >
+			<column name="destservername" length="255" />
+		</property>
+		<property name="destServerType" type="string" >
+			<column name="destservertype" length="100" />
+		</property>
+		<property name="destServerAddr" type="string" >
+			<column name="destserveraddr" length="255" />
+		</property>
+		<property name="srcServerId">
+            <column name="srcserverid" sql-type="bigint"/>
+        </property>
+		<property name="srcServerName" type="string" >
+			<column name="srcservername" length="255" />
+		</property>
+		<property name="srcServerType" type="string" >
+			<column name="srcservertype" length="100" />
+		</property>
+		<property name="srcServerAddr" type="string" >
+			<column name="srcserveraddr" length="255" />
+		</property>
+		
+		<property name="taskTypeName" type="string" >
+			<column name="tasktypename" length="255" />
+		</property>
+		<property name="dataSourceTypeName" type="string" >
+			<column name="datasourcetypename" length="255" />
+		</property>
+		<property name="taskStatusName" type="string" >
+			<column name="taskstatusname" length="255" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="backupNodeAddr" type="string" formula="(SELECT nodes.nodeaddr FROM iyun_partner_bakup2nodes nodes WHERE nodes.id = id)"/>
+	</class>
+</hibernate-mapping>

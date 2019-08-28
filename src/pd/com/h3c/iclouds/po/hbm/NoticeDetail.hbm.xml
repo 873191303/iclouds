@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.NoticeDetail" table="iyun_notice_detail">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="noticeId">
+            <column name="notice_id" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="detail">
+            <column name="detail" sql-type="varchar(1024)" length="1024"/>
+        </property>
+    </class>
+</hibernate-mapping>

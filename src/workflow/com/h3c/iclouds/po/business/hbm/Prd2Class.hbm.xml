@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.PrdClass" table="iyun_base_prdClass">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="className" type="string">
+            <column name="className" length="100"/>
+        </property>
+        <property name="flag" type="string">
+            <column name="flag" length="1"/>
+        </property>
+        <property name="flavorFlag" type="boolean">
+            <column name="flavorflag"/>
+        </property>
+        <property name="type" type="string">
+            <column name="type" length="100"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="GroupID" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="50"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

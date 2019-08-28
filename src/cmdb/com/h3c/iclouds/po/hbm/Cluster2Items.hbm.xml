@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Cluster2Items" table="cmdb_server_cluster2Items">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="assId" type="string">
+            <column name="assId" length="36"/>
+        </property>
+        <property name="custerTId" type="string">
+            <column name="custerTId" length="50"/>
+        </property>
+        <property name="phostId" type="string">
+            <column name="phostId" length="36"/>
+        </property>
+        <property name="cvkVersion" type="string">
+            <column name="cvk_Version" length="25"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="500"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="vms" type="integer" formula="(select count(*) from cmdb_cloud_server2vm s where s.hostId = id)"/>
+        <property name="ip" type="string" formula="(select m.iloIP from cmdb_asm_master m where m.id = assId)"/>
+        <property name="serial" type="string" formula="(select m.serial from cmdb_asm_master m where m.id = assId)"/>
+        <property name="poolsName" type="string" formula="(select pool.poolName from cmdb_server_pools2host pool where pool.id = phostId)"/>
+        <property name="clusName" type="string" formula="(select clus.cname from cmdb_server_clusters clus where clus.id = custerTId)"/>
+        <property name="hname" type="string" formula="(select mast.assetName from cmdb_asm_master mast where mast.id = assId)"/>
+    </class>
+</hibernate-mapping>

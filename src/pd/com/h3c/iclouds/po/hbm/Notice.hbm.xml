@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Notice" table="iyun_base_notice" >
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="title" type="java.lang.String">
+            <column name="title" length="255"/>
+        </property>
+        <property name="brief" type="java.lang.String">
+            <column name="brief" length="255"/>
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="16"/>
+        </property>
+        <property name="grade" type="java.lang.String">
+            <column name="grade" length="16"/>
+        </property>
+        <property name="tenantId" type="java.lang.String">
+            <column name="tenant_id" length="64"/>
+        </property>
+        <property name="deleted" type="java.lang.String">
+            <column name="deleted" length="32"/>
+        </property>
+        <property name="hint" type="boolean">
+            <column name="hint" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+         
+        <property name="detail" type="string" formula="(SELECT d.detail FROM iyun_notice_detail d WHERE d.notice_id = id)"/>
+    </class>
+</hibernate-mapping>

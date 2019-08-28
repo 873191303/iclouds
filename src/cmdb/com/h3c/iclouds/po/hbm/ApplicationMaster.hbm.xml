@@ -1,0 +1,76 @@
+<?xml version='1.0'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.ApplicationMaster" table="cmdb_application_master">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+             <generator class="assigned" />
+        </id>
+        <property name="appName">
+            <column name="appname" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="mode">
+            <column name="mode" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="projectId">
+            <column name="projectId" sql-type="varchar(36)" length="36"/>
+        </property>
+         <property name="isPrivate">
+            <column name="isPrivate" sql-type="boolean"/>
+        </property>
+        <property name="dns">
+            <column name="dns" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="url">
+            <column name="url" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="port">
+            <column name="port" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="scope">
+            <column name="scope" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="apprRame">
+            <column name="apprrame" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="trTime">
+            <column name="trtime" sql-type="timestamp" not-null="true"/>
+        </property>
+        <property name="domains">
+            <column name="domains" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="appdept">
+            <column name="appdept" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(200)" length="200"/>
+        </property>
+        <property name="owner">
+            <column name="owner" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="protocol">
+            <column name="protocol" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="iconPath">
+            <column name="iconpath" sql-type="text"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

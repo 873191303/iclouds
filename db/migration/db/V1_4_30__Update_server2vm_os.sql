@@ -1,0 +1,1 @@
+ALTER TABLE cmdb_cloud_server2vm ALTER COLUMN os type varchar(500);

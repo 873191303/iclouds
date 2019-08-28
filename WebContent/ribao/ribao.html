@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>容量日报</title>
+</head>
+<body>
+    <div id="_Ecvm"></div>
+    <div id="_Eserver"></div>
+    <div id="_Estorage"></div>
+</body>
+<style type="text/css">
+    div{height: 400px;width: 800px;margin: 50px auto;}
+</style>
+<script type="text/javascript" src="echarts.min.js"></script>
+<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+// 初始化echarts实例
+var Ecvm = echarts.init(document.getElementById('_Ecvm'));
+var Eserver = echarts.init(document.getElementById('_Eserver'));
+var Estorage = echarts.init(document.getElementById('_Estorage'));
+
+function pluck(arr,porp) { return arr.map(function (item) {return item[porp]}) }
+
+$(document).ready(function(){
+    $.get("../dailyreport/list", function(data){
+        console.log(data);
+        var record = data.record;
+        /*var cvm_option = {
+            grid: { left: '80px', right: '100px', bottom: '3%', containLabel: true },
+            toolbox: { show: true, feature: { saveAsImage: { show: true } },right: '20px' },
+
+            title: { text: 'CVM超配' },
+            legend: { data: ['CPU超配率', '存储超配率'], top: 20 },
+            xAxis: [{ type: 'category', name: 'CVM名称', data: pluck(record.cvm2Ove, 'cvmName'), axisTick: { alignWithLabel: true } }],
+            yAxis: [{ type: 'value', name: '超配率（%）' }],
+            series: [
+                { name: 'CPU超配率', type: 'bar', barWidth: '35px', data: pluck(record.cvm2Ove, 'cpuUsage') },
+                { name: '存储超配率', type: 'bar', barWidth: '35px', data: pluck(record.cvm2Ove, 'memUsage') }
+            ]
+        };
+
+        var server_option = {
+            grid: { left: '80px', right: '100px', bottom: '3%', containLabel: true },
+            toolbox: { show: true, feature: { saveAsImage: { show: true } },right: '20px' },
+
+            title: { text: '主机超配' },
+            legend: { data: ['CPU超配率', '存储超配率'], top: 20 },
+            xAxis: [{ type: 'category', name: '主机名称', data: pluck(record.server2Ove, 'hostName'), axisTick: { alignWithLabel: true } }],
+            yAxis: [{ type: 'value', name: '超配率（%）' }],
+            series: [
+                { name: 'CPU超配率', type: 'bar', barWidth: '35px', data: pluck(record.server2Ove, 'cpuUsage') },
+                { name: '存储超配率', type: 'bar', barWidth: '35px', data: pluck(record.server2Ove, 'memUsage') }
+            ]
+        };
+
+        var storage_option = {
+            grid: { left: '80px', right: '100px', bottom: '3%', containLabel: true },
+            toolbox: { show: true, feature: { saveAsImage: { show: true } },right: '20px' },
+
+            title: { text: '存储超配' },
+            legend: { data: ['存储超配率'], top: 20 },
+            xAxis: [{ type: 'category', name: '存储名称', data: pluck(record.storage2Ove, 'name'), axisTick: { alignWithLabel: true } }],
+            yAxis: [{ type: 'value', name: '超配率（%）' }],
+            series: [
+                { name: '存储超配率', type: 'bar', barWidth: '35px', data: pluck(record.storage2Ove, 'capaOverflow') }
+            ]
+        };*/
+        // 设置option
+        Ecvm.setOption(record.cvm2Ove);
+        Eserver.setOption(record.server2Ove);
+        Estorage.setOption(record.storage2Ove);
+
+        // 提交数据
+        var req = {
+           cvm2Ove:Ecvm.getDataURL(),
+           storage2Ove:Estorage.getDataURL(),
+           server2Ove:Eserver.getDataURL()
+            
+        };
+        console.log('发送请求',req);
+        $.post("../dailyreport/picture",JSON.stringify(req),function (result) {
+            console.log(result);
+        })
+    });
+});
+</script>
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.Route" table="iyun_vdc_route">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="name" type="string">
+			<column name="name" length="50" />
+		</property>
+		<property name="status" type="string">
+			<column name="status" length="50" />
+		</property>
+		<property name="adminStateUp" type="boolean">
+			<column name="admin_state_up" />
+		</property>
+		<property name="gwPortId" type="string">
+			<column name="gw_port_id" length="32" />
+		</property>
+		<property name="enableSnat" type="boolean">
+			<column name="enable_snat" />
+		</property>
+		<property name="tenantId" type="string">
+			<column name="tenant_id" length="255" />
+		</property>
+		<property name="vdcId" type="string">
+			<column name="vdc_id" length="50" />
+		</property>
+		<property name="fwId" type="string">
+			<column name="fwid" length="50" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		<property name="vdcName" type="string" formula="(SELECT vdc.name FROM iyun_base_vdc vdc WHERE vdc.id = vdc_id)"/>
+		<property name="firewallName" type="string" formula="(SELECT firewall.name FROM iyun_vdc_firewall firewall WHERE firewall.id = fwid)"/>
+		<property name="uuid" type="string" formula="(SELECT item.uuid FROM iyun_vdc_items item WHERE item.id = id)"/>
+		<property name="firewallCloudosId" type="string" formula="(SELECT firewall.cloudos_id FROM iyun_vdc_firewall firewall WHERE firewall.id = fwid)"/>
+		<property name="externalGateway" type="string" formula="(SELECT ip.ip_address FROM iyun_vdc_ipallocations ip WHERE ip.port_id = gw_port_id LIMIT 1)"/>
+		<property name="gwPortCdId" type="string"
+				  formula="(SELECT port.cloudos_id FROM iyun_vdc_ports port WHERE port.id = gw_port_id)"/>
+		<property name="gwNetworkId" type="string"
+				  formula="(SELECT sub.network_id FROM iyun_vdc_subnet sub WHERE sub.id = (SELECT ip.subnet_id FROM iyun_vdc_ipallocations ip WHERE ip.port_id = gw_port_id))"/>
+		<property name="gwNetworkCdId" type="string"
+				  formula="(SELECT net.cloudos_id FROM iyun_vdc_network net WHERE net.id = ((SELECT sub.network_id FROM iyun_vdc_subnet sub WHERE sub.id = (SELECT ip.subnet_id FROM iyun_vdc_ipallocations ip WHERE ip.port_id = gw_port_id))))"/>
+		<property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = tenant_id)"/>
+	</class>
+</hibernate-mapping>

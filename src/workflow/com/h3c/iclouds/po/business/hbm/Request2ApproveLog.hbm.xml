@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.Request2ApproveLog" table="bus_req_master2approveLog">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="reqId" type="string">
+            <column name="reqId" length="36"/>
+        </property>
+        <property name="insId" type="string" update="false">
+            <column name="insId" length="36"/>
+        </property>
+        <property name="step" type="string">
+            <column name="step" length="100"/>
+        </property>
+        <property name="taskId" type="string" update="false">
+            <column name="taskId" length="36"/>
+        </property>
+        <property name="option" type="string">
+            <column name="option" length="36" />
+        </property>
+        <property name="comment" type="string">
+            <column name="comment" length="500"/>
+        </property>
+        <property name="approver" type="string">
+            <column name="approver" length="36"/>
+        </property>
+        <property name="emails" type="string">
+            <column name="emails" />
+        </property>
+        <property name="attachment" type="string">
+            <column name="attachment" length="100" />
+        </property>
+        <property name="groupId" type="string">
+            <column name="GroupID" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="50"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <property name="approverName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = approver)"/>
+    </class>
+</hibernate-mapping>

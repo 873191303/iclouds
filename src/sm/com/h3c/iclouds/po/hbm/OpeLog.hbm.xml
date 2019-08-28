@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.OpeLog" table="iyun_sm_opelog">
+        <id name="id" type="string">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="logTypeId" type="string">
+            <column name="log_typeid" length="100"/>
+        </property>
+        <property name="opeUserName" type="string">
+            <column name="ope_username" length="100"/>
+        </property>
+        <property name="opeUserId" type="string">
+            <column name="ope_userid" length="36"/>
+        </property>
+        <property name="opeLoginName" type="string">
+            <column name="ope_loginname" length="100"/>
+        </property>
+        <property name="opeParams" type="string">
+            <column name="ope_params" length="500"/>
+        </property>
+        <property name="opeUrl" type="string">
+            <column name="ope_url" length="200"/>
+        </property>
+        <property name="opeStartTime" type="timestamp">
+            <column name="ope_starttime"/>
+        </property>
+        <property name="opeEndTime" type="timestamp">
+            <column name="ope_endtime"/>
+        </property>
+        <property name="result" type="string">
+            <column name="result" length="100" />
+        </property>
+        <property name="opeIp" type="string" update="false">
+            <column name="ope_ip" length="32" />
+        </property>
+        <property name="remark" type="string" update="false">
+            <column name="remark"/>
+        </property>
+    </class>
+</hibernate-mapping>

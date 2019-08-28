@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.Firewall" table="iyun_vdc_firewall">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="name" update="false">
+            <column name="name" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="description">
+            <column name="description" sql-type="varchar(1024)" length="1024"/>
+        </property>
+        <property name="shared">
+            <column name="shared" sql-type="bool"/>
+        </property>
+        <property name="tenantId" update="false">
+            <column name="tenant_id" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="adminStateUp">
+            <column name="admin_state_up" sql-type="bool"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="cloudosId" type="string">
+            <column name="cloudos_id" length="50" />
+        </property>
+        <property name="createdBy" update="false">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate" update="false">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <property name="uuid" type="string" formula="(SELECT item.uuid FROM iyun_vdc_items item WHERE item.id = id)"/>
+        <property name="vdcId" type="string" formula="(SELECT v2f.vdcid FROM iyun_vdc_vdc2fw v2f WHERE v2f.fireware = id)"/>
+        <property name="vdcName" type="string" formula="(SELECT vdc.name FROM iyun_base_vdc vdc WHERE vdc.id = (SELECT v2f.vdcid FROM iyun_vdc_vdc2fw v2f WHERE v2f.fireware = id))"/>
+        <property name="throughPut" type="integer"
+                  formula="(SELECT v2f.throughput FROM iyun_vdc_vdc2fw v2f WHERE v2f.fireware = id)"/>
+        <property name="sequence" type="int" formula="(SELECT v2f.sequence FROM iyun_vdc_vdc2fw v2f WHERE v2f.fireware = id)"/>
+        <property name="policyId" type="string" formula="(SELECT f2p.policieid FROM iyun_vdc_fw2policie f2p WHERE f2p.firewareid = id)"/>
+        <property name="policyCloudosId" type="string" formula="(SELECT poli.cloudos_id FROM iyun_fw_policie poli WHERE poli.id = (SELECT f2p.policieid FROM iyun_vdc_fw2policie f2p WHERE f2p.firewareid = id))"/>
+        <property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = tenant_id)"/>
+        <property name="routeName" type="string"
+                  formula="(select r.name from iyun_vdc_route r where r.fwid = id limit 1)"/>
+    </class>
+</hibernate-mapping>

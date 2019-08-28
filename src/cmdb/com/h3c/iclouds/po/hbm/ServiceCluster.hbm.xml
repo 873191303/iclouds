@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.ServiceCluster" table="cmdb_service_clusters">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="assigned" />
+        </id>
+        <property name="cname">
+            <column name="cname" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="relation">
+            <column name="relation" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="vip">
+            <column name="vip" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(500)" length="500" not-null="true"/>
+        </property>
+        <property name="projectId">
+            <column name="projectid" sql-type="varchar(64)" length="64" not-null="true"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

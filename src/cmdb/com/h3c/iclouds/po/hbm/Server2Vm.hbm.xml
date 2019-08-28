@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Server2Vm" table="cmdb_cloud_server2vm">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="hostId" type="string">
+            <column name="hostId" length="50"/>
+        </property>
+        <property name="serilNo" type="string">
+            <column name="serilNo" length="50"/>
+        </property>
+        <property name="vmName" type="string">
+            <column name="vmName" length="50"/>
+        </property>
+        <property name="uuid" type="string">
+            <column name="uuid" length="50"/>
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="36"/>
+        </property>
+        <property name="os" type="string">
+            <column name="os"/>
+        </property>
+        <property name="cpu" type="integer">
+            <column name="cpu" length="16"/>
+        </property>
+        <property name="memory" type="integer">
+            <column name="memory" length="16"/>
+        </property>
+        <property name="storage" type="integer">
+            <column name="storage" length="32"/>
+        </property>
+        <property name="sysUser" type="string">
+            <column name="sysUser" length="36"/>
+        </property>
+        <property name="userId" type="string">
+            <column name="userId" length="36"/>
+        </property>
+        <property name="note" type="string">
+            <column name="note" length="100"/>
+        </property>
+        <property name="syncType" type="string">
+            <column name="syncType" length="50"/>
+        </property>
+        <property name="lastSyncDate" type="timestamp">
+            <column name="lastSyncDate" length="19"/>
+        </property>
+        <property name="belongCas" type="string">
+            <column name="belongcas" length="36"/>
+        </property>
+        <property name="casId" type="string">
+            <column name="casid" length="36"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Maintenancs" table="cmdb_asm_maintenancs">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="assId" type="string" update="false">
+            <column name="assId" length="36"/>
+        </property>
+        <property name="contract" type="string">
+            <column name="contract" length="50"/>
+        </property>
+        <property name="depth" type="string">
+            <column name="depth" length="50"/>
+        </property>
+        <property name="expense" type="float">
+            <column name="expense" length="24"/>
+        </property>
+        <property name="begTime" type="timestamp">
+            <column name="begTime" length="19"/>
+        </property>
+        <property name="endTime" type="timestamp">
+            <column name="endTime" length="19"/>
+        </property>
+        <property name="msupId" type="string">
+            <column name="msupId" length="500"/>
+        </property>
+        <property name="contact" type="string">
+            <column name="contact" length="20"/>
+        </property>
+        <property name="owner" type="string">
+            <column name="owner" length="50"/>
+        </property>
+        <property name="remark" type="string" >
+            <column name="remark" length="100" />
+        </property>
+        <property name="attach" type="string">
+            <column name="attach" length="50"/>
+        </property>
+        <property name="warnTime" type="int">
+            <column name="warnTime" length="16"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

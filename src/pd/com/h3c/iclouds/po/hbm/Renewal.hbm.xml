@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.Renewal" table="tbl_resource_tenancy">
+		<id name="uuid" type="string">
+			<column name="uuid" length="36"/>
+		</id>
+		<property name="userUuid" type="string">
+			<column name="user_uuid" length="36" />
+		</property>
+		<property name="userName" type="string">
+			<column name="user_name" length="255"/>
+		</property>
+		<property name="email" type="string">
+			<column name="email" length="64" />
+		</property>
+		<property name="serviceUuid" type="string">
+			<column name="service_uuid" length="36" />
+		</property>
+		<property name="resourceUuid" type="string">
+			<column name="resource_uuid" length="36" />
+		</property>
+		<property name="resourceName" type="string">
+			<column name="resource_name" length="512" />
+		</property>
+		<property name="startTime" type="timestamp">
+			<column name="start_time" length="6" />
+		</property>
+		<property name="endTime" type="timestamp">
+			<column name="end_time" length="6" />
+		</property>
+		<property name="isdue" type="boolean">
+			<column name="isdue" length="0" />
+		</property>
+		<property name="tenantId" type="string">
+			<column name="tenant_id" length="36" />
+		</property>
+		<property name="tenancyDay" type="int">
+			<column name="tenancy_day" length="64" />
+		</property>
+		<property name="deleted" type="boolean">
+			<column name="deleted" length="0" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="256" />
+		</property>
+		<property name="dueAction" type="string">
+			<column name="due_action" length="36" />
+		</property>
+		
+	</class>
+</hibernate-mapping>

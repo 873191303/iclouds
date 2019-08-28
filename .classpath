@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/sm"/>
+	<classpathentry kind="src" path="src/monitor"/>
+	<classpathentry kind="src" path="src/sdn"/>
+	<classpathentry kind="src" path="src/core"/>
+	<classpathentry kind="src" path="src/third-interface"/>
+	<classpathentry kind="src" path="src/sso"/>
+	<classpathentry kind="src" path="src/eisso"/>
+	<classpathentry kind="src" path="config"/>
+	<classpathentry kind="src" path="src/pd"/>
+	<classpathentry kind="src" path="src/schedule"/>
+	<classpathentry kind="src" path="src/workflow"/>
+	<classpathentry kind="src" path="src/cmdb"/>
+	<classpathentry kind="src" path="db/migration"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_73">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
+</classpath>

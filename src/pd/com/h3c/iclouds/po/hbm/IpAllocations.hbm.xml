@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.IpAllocation" table="iyun_vdc_ipallocations">
+		<composite-id >
+			<key-property name="portId" column="port_id" type="string"/>
+			<key-property name="subnetId" column="subnet_id" type="string"/>
+		</composite-id>
+		<property name="ipAddress" type="string">
+			<column name="ip_address" length="64" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+	</class>
+</hibernate-mapping>

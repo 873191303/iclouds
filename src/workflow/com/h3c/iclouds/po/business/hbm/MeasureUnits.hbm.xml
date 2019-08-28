@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.business.MeasureUnits" table="iyun_measure_units">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="code">
+            <column name="code" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="minValue">
+            <column name="minValue" sql-type="int"/>
+        </property>
+        <property name="maxValue">
+            <column name="maxValue" sql-type="int"/>
+        </property>
+        <property name="defaultValue">
+            <column name="default" sql-type="int"/>
+        </property>
+        <property name="unit">
+            <column name="unit" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="description">
+            <column name="descript" sql-type="varchar(100)" length="100" />
+        </property>
+        <property name="classId">
+            <column name="classid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

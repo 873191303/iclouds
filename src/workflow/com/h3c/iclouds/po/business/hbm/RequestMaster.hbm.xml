@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.business.RequestMaster" table="bus_req_master" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        
+        <!-- XML格式的version属性映射必须立即放在标示符属性映射之后 -->  
+    	<version name="version" access="field" column="version" />
+    	
+        <property name="reqCode" type="string" update="false">
+            <column name="reqCode" length="50" />
+        </property>
+        <property name="step" type="string">
+            <column name="step" length="36"/>
+        </property>
+        <property name="responsible" type="string">
+            <column name="responsible" length="36"/>
+        </property>
+        <property name="projectName" type="string">
+            <column name="projectName" length="100"/>
+        </property>
+        <property name="isSign" type="string">
+            <column name="isSign" length="36" />
+        </property>
+        <property name="contract" type="string">
+            <column name="contract" length="50"/>
+        </property>
+        <property name="amount" type="double">
+            <column name="amount" />
+        </property>
+        <property name="projectDesc" type="string">
+            <column name="projectDesc" length="500"/>
+        </property>
+        <property name="cusId" type="string">
+            <column name="cusId" length="36" />
+        </property>
+        <property name="contact" type="string">
+            <column name="contact" length="50" />
+        </property>
+        <property name="iphone" type="string">
+            <column name="iphone" length="50" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="36" />
+        </property>
+        <property name="chgFlag" type="string">
+            <column name="chgFlag" length="1" />
+        </property>
+        <property name="srcReqId" type="string" update="false">
+            <column name="srcReqId" length="36"/>
+        </property>
+        <property name="instanceId" type="string">
+            <column name="instanceId" length="36" />
+        </property>
+        <property name="workFlowId" type="string">
+            <column name="workFlowId" length="36" />
+        </property>
+        <property name="slaFlag" type="string">
+            <column name="slaFlag" length="36" />
+        </property>
+        <property name="slaLvl" type="string">
+            <column name="slaLvl" length="36" />
+        </property>
+        <property name="priority" type="string">
+            <column name="priority" length="36" />
+        </property>
+        
+        <property name="actFTime" type="timestamp">
+            <column name="actFTime" length="19"/>
+        </property>
+        <property name="reqFTime" type="timestamp">
+            <column name="reqFTime" length="19"/>
+        </property>
+         <property name="groupId" type="string">
+            <column name="GroupID" length="50" />
+        </property>
+        <property name="customerType" type="string">
+            <column name="customerType" length="50" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="50"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        <property name="cusName" type="string" formula="(select t.cusName from bus_cis_custom t where t.id = cusId)"/>
+        <property name="contactName" type="string" formula="(select t.cname from bus_cis_contact t where t.id = contact)"/>
+        <property name="responsibleName" type="string" formula="(select t.username from iyun_sm_user t where t.id = responsible)"/>
+        
+        <property name="srcReqCode" type="string" formula="(select t.reqCode from bus_req_master t where t.id = srcReqId)"/>
+        <property name="tgtReqCode" type="string" formula="(select t.reqCode from bus_req_master t where t.srcReqId = id limit 1)"/>
+        <property name="lasthandledate" type="string" formula="(SELECT mll.createddate from bus_req_master2approvelog mll where mll.reqid = id order by mll.createddate desc limit 1)"/>
+
+        <set name="items" table="bus_req_items" order-by="seq desc" lazy="false" cascade="all" inverse="true">
+            <key column="reqId"></key>
+            <one-to-many class="com.h3c.iclouds.po.business.RequestItems"/>
+		</set>
+		
+		<property name="reqtype" type="integer">
+            <column name="reqtype" />
+        </property>
+		
+    </class>
+</hibernate-mapping>

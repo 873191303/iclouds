@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.SecurityRule" table="iyun_securitygroups_rule">
+		<id name="id" type="string">
+			<column name="id" length="36"/>
+			<generator class="uuid.hex"/>
+		</id>
+		<property name="securityGroupId" type="string">
+			<column name="security_group_od" length="36" />
+		</property>
+		<property name="remoteGroupId" type="string">
+			<column name="remote_group_id" length="36" />
+		</property>
+		<property name="direction" type="string">
+			<column name="direction" length="50"/>
+		</property>
+		<property name="etherType" type="string">
+			<column name="etherType" length="40" />
+		</property>
+		<property name="protocol" type="string">
+			<column name="protocol" length="40"/>
+		</property>
+		<property name="portRangeMin" type="int">
+			<column name="port_range_min" length="4" />
+		</property>
+		<property name="portRangeMax" type="int">
+			<column name="port_range_max" length="4"/>
+		</property>
+		<property name="remoteIpPrefix" type="string">
+			<column name="remote_ip_prefix" length="250" />
+		</property>
+		<property name="tenantId" type="string">
+			<column name="tenant_id" length="255" />
+		</property>
+		<property name="cloudosId" type="string">
+			<column name="cloudos_id" length="50" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+	</class>
+</hibernate-mapping>

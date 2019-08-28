@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.VmTop" table="vm_top">
+        <id name="uuid" type="string">
+            <column name="uuid"/>
+        </id>
+        <property name="id" column="id"/>
+        <property name="hostname" column="hostname"/>
+        <property name="vcpus" column="vcpus"/>
+        <property name="memory" column="memory"/>
+        <property name="ramdisk" column="ramdisk"/>
+        <property name="owner" column="owner"/>
+        <property name="projectid" column="projectid"/>
+        <property name="cpurate" column="cpurate"/>
+        <property name="memrate" column="memrate"/>
+        <property name="collecttime" column="collecttime"/>
+    </class>
+</hibernate-mapping>

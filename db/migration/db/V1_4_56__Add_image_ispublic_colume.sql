@@ -1,0 +1,1 @@
+ALTER TABLE public.iyun_base_images ADD definition VARCHAR(36) NULL;

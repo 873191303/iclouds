@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Project2Azone" table="iyun_keystone_project2azone">
+        <id name="uuid" type="string">
+            <column name="uuid" length="64" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="id" type="string">
+            <column name="id" length="64"/>
+        </property>
+        <property name="iyuUuid" type="string">
+            <column name="iyu_uuid" length="128"/>
+        </property>
+        <property name="deleted" type="string">
+            <column name="deleted" length="32"/>
+        </property>
+    </class>
+</hibernate-mapping>

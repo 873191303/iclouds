@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.User" table="iyun_sm_user">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="deptId" type="string">
+            <column name="deptId" length="36"/>
+        </property>
+        <property name="projectId" type="string" update="false">
+            <column name="projectId" length="36"/>
+        </property>
+        <property name="loginName" type="string" update="false">
+            <column name="loginName" length="100" />
+        </property>
+        <property name="userName" type="string">
+            <column name="userName" length="100"/>
+        </property>
+        <property name="isAdmin" type="string">
+            <column name="isAdmin" length="1"/>
+        </property>
+        <property name="idCard" type="string">
+            <column name="idCard" length="20"/>
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="100"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="100"/>
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="100"/>
+        </property>
+        <property name="telephone" type="string">
+            <column name="telephone" length="100"/>
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="1"/>
+        </property>
+        <property name="effectiveDate" type="timestamp">
+            <column name="effectiveDate" length="19"/>
+        </property>
+        <property name="expireDate" type="timestamp">
+            <column name="expireDate" length="19"/>
+        </property>
+        <property name="inDomain" type="string">
+            <column name="inDomain" length="1"/>
+        </property>
+        <property name="defaultGroupId" type="string">
+            <column name="defaultGroupId" length="36"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <property name="cloudosId" type="string">
+            <column name="cloudosId" length="36" />
+        </property>
+        
+        <property name="deptName" type="string" formula="(select t.deptName from iyun_sm_department t where t.id = deptId)"/>
+        <property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = projectId)"/>
+        <property name="createdByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = CreatedBy)"/>
+        <property name="updatedByName" type="string" formula="(select t.userName from iyun_sm_user t where t.id = UpdatedBy)"/>
+        <property name="lastLoginDate" type="timestamp" formula="(select t.createddate from iyun_sm_operateLogs t where t.userid = id and t.result = 'success' order by t.createddate desc limit 1)"/>
+        
+        <set name="userToGroupSet" table="iyun_sm_user2Group" lazy="true" cascade="delete" inverse="true">
+            <key column="userId"></key>
+            <one-to-many class="com.h3c.iclouds.po.User2Group"/>
+		</set>
+		
+		<set name="userToRoleSet" table="iyun_sm_user2Role" lazy="true" cascade="delete" inverse="true">
+            <key column="userId"></key>
+            <one-to-many class="com.h3c.iclouds.po.User2Role"/>
+		</set>
+    </class>
+</hibernate-mapping>

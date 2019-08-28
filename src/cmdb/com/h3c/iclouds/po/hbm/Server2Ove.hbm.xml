@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Server2Ove" table="cmdb_cap_server2ovelflow">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="poolId" type="string">
+            <column name="poolId" length="36"/>
+        </property>
+        <property name="custerId" type="string">
+            <column name="clousterId" length="36"/>
+        </property>
+        <property name="assetId" type="string">
+            <column name="assetId" length="36"/>
+        </property>
+        <property name="hostId" type="string">
+            <column name="hostId" length="100"/>
+        </property>
+        <property name="hostName" type="string">
+            <column name="hostName" length="36"/>
+        </property>
+        <property name="serilNum" type="string">
+            <column name="seriNo" length="36"/>
+        </property>
+        <property name="belongId" type="string">
+            <column name="belongTo" length="36"/>
+        </property>
+        <property name="year" type="string">
+            <column name="year" length="4"/>
+        </property>
+        <property name="month" type="string">
+            <column name="month" length="2"/>
+        </property>
+        <property name="day" type="string">
+            <column name="day" length="2"/>
+        </property>
+        <property name="cpus" type="int">
+            <column name="cpus"/>
+        </property>
+        <property name="cpuOverSize" type="float">
+            <column name="cpuOverSize"/>
+        </property>
+        <property name="ram" type="int">
+            <column name="ram"/>
+        </property>
+        <property name="ramOverSize" type="float">
+            <column name="ramOverSize"/>
+        </property>
+        <property name="vms" type="int">
+            <column name="vms"/>
+        </property>
+        <property name="userId" type="string">
+            <column name="tenant" length="36"/>
+        </property>
+        <property name="date" type="timestamp">
+            <column name="syncDate"/>
+        </property>
+        <property name="ip" type="string">
+            <column name="IP" length="36"/>
+        </property>
+        <property name="mac" type="string">
+            <column name="mac" length="36"/>
+        </property>
+        <property name="belongCas" type="string">
+            <column name="belongcas" length="36"/>
+        </property>
+        <property name="casId" type="string">
+            <column name="casid" length="36"/>
+        </property>
+        <property name="poolName" type="string"
+                  formula="(select pool.poolName from cmdb_server_pools2host pool where pool.id = poolid)"/>
+        <property name="custerName" type="string"
+                  formula="(select clus.cname from cmdb_server_clusters clus where clus.id = clousterId)"/>
+        <property name="assetName" type="string"
+                  formula="(select mast.assetName from cmdb_asm_master mast where mast.id = assetId)"/>
+        <property name="assignMem" type="integer"
+                  formula="(SELECT sum(server.memory) FROM cmdb_cloud_server2vm server WHERE server.hostId = id)"/>
+        <property name="memUsage" type="double"
+                  formula="(select (select sum(server.memory) from cmdb_cloud_server2vm server where server.hostid = id )*100.0/ram)"/>
+        <property name="assignCpu" type="integer"
+                  formula="(SELECT sum(server.cpu) FROM cmdb_cloud_server2vm server WHERE server.hostId = id)"/>
+        <property name="cpuUsage" type="double"
+                  formula="(select (select sum(server.cpu) from cmdb_cloud_server2vm server where server.hostid = id )*100.0/cpus)"/>
+        <property name="belongCvm" type="string"
+                  formula="(select cvm.cvmName from cmdb_cap_cvm2ovelflow cvm where cvm.id = belongTo )"/>
+    </class>
+</hibernate-mapping>

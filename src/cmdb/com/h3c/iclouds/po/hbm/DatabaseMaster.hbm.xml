@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.DatabaseMaster" table="cmdb_database_master">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="assigned" />
+        </id>
+        <property name="dbDesc">
+            <column name="dbdesc" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="dbVersion">
+            <column name="dbversion" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="instanceName">
+            <column name="instancename" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="dbName">
+            <column name="dbname" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="port">
+            <column name="port" sql-type="varchar(10)" length="10" not-null="true"/>
+        </property>
+        <property name="hosts">
+            <column name="hosts" sql-type="varchar(36)" length="36" not-null="true"/>
+        </property>
+        <property name="hostType">
+            <column name="hosttype" sql-type="varchar(36)" length="36" not-null="true"/>
+        </property>
+        <property name="ip">
+            <column name="ip" sql-type="varchar(40)" length="40" not-null="true"/>
+        </property>
+        <property name="adminConsole">
+            <column name="adminconsole" sql-type="varchar(40)" length="40" not-null="true"/>
+        </property>
+        <property name="supportLevel">
+            <column name="supportlevel" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="purpose">
+            <column name="purpose" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="dbowner">
+            <column name="dbowner" sql-type="varchar(36)" length="36" not-null="true"/>
+        </property>
+        <property name="projectId">
+            <column name="projectid" sql-type="varchar(64)" length="64" not-null="true"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+         <property name="isPrivate">
+            <column name="isPrivate" sql-type="boolean"/>
+        </property>
+         <property name="dbType" type="int">
+            <column name="dbType" />
+        </property>
+    </class>
+</hibernate-mapping>

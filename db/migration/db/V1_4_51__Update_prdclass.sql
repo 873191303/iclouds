@@ -1,0 +1,12 @@
+update iyun_base_prd2templates set keyname = '公网带宽' where id = '5';
+update iyun_base_prdclass set flag = '0' where id in ('11');
+INSERT INTO iyun_base_prdclass (id, classname, flag, groupid, createdby, createddate, updatedby, updateddate) VALUES ('13', '公网IP', '1', '1', '1', '2017-05-03 13:38:24', '1', '2017-05-03 13:38:27');
+INSERT INTO iyun_base_prdclass (id, classname, flag, groupid, createdby, createddate, updatedby, updateddate) VALUES ('14', '专网接入', '1', '1', '1', '2017-05-03 13:38:24', '1', '2017-05-03 13:38:27');
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('94', '13', 'bandWidth', '公网带宽', '1', NULL, '1', '0', '0', 'MB');
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('95', '13', 'remark', '备注', '2', NULL, '3', '0', '1', NULL);
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('96', '14', 'targetIp', '客户侧IP地址', '1', 'IP', '3', '0', '0', NULL);
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('97', '14', 'speed', '速率', '2', 'contain(1,10)', '1', '0', '0', 'GB');
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('98', '14', 'sourceIp', '互联地址', '3', 'IP', '3', '0', '0', NULL);
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('99', '14', 'remark', '其他需求', '4', NULL, '3', '0', '1', NULL);
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('100', '13', 'month', '购买时长', '11', NULL, '1', '0', '1', NULL);
+INSERT INTO iyun_base_prd2templates (id, classid, key, keyname, orderby, validate, datatype, isshow, ismust, units) VALUES ('101', '14', 'month', '购买时长', '11', NULL, '1', '0', '1', NULL);

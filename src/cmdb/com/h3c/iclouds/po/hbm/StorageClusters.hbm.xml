@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.StorageClusters" table="cmdb_storagedevice_clusters">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="50"/>
+        </property>
+        <property name="gid" type="string">
+            <column name="gid" length="50"/>
+        </property>
+        <property name="ip" type="string">
+            <column name="ip" length="50"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="100"/>
+        </property>
+        <property name="type" type="string">
+            <column name="type"/>
+        </property>
+        <property name="hpId" type="string">
+            <column name="hpid"/>
+        </property>
+        <property name="belongId" type="string">
+            <column name="belonghpid"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="groupName" type="string" formula="(SELECT grou.name FROM cmdb_storagedevice_groups grou WHERE grou.id = gid)"/>
+        <property name="items" type="integer" formula="(SELECT count(item.*) FROM cmdb_storagedevice_group2Items item WHERE item.cid = id)"/>
+        <property name="volums" type="integer" formula="(SELECT count(volu.*) FROM cmdb_storagedevice_volums volu WHERE volu.sid = id)"/>
+        <property name="size" type="float"
+                  formula="(select sum(vol.size) from cmdb_storagedevice_volums vol where vol.sid = id)"/>
+        <property name="usedSize" type="float"
+                  formula="(select sum(vol.usedsize) from cmdb_storagedevice_volums vol where vol.sid = id)"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.StorageGroups2Items" table="cmdb_storagedevice_group2Items">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="masterId" type="string">
+            <column name="masterId" length="50"/>
+        </property>
+        <property name="cid" type="string">
+            <column name="cid" length="36"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="500"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="name" type="string" formula="(SELECT mast.assetName FROM cmdb_asm_master mast WHERE mast.id = masterId)"/>
+        <property name="cname" type="string" formula="(SELECT clus.name FROM cmdb_storagedevice_clusters clus WHERE clus.id = cid)"/>
+        <property name="serial" type="string" formula="(SELECT mast.serial FROM cmdb_asm_master mast WHERE mast.id = masterId)"/>
+        <property name="assMode" type="string" formula="(SELECT mast.assMode FROM cmdb_asm_master mast WHERE mast.id = masterId)"/>
+        <property name="ip" type="string" formula="(SELECT mast.iloIP FROM cmdb_asm_master mast WHERE mast.id = masterId)"/>
+        <property name="useFlag" type="string" formula="(SELECT mast.useFlag FROM cmdb_asm_master mast WHERE mast.id = masterId)"/>
+        <property name="size" type="integer"
+                  formula="(SELECT master.disktotal FROM cmdb_asm_master master WHERE master.id = masterId)"/>
+        <property name="status" type="string"
+                  formula="(SELECT master.status FROM cmdb_asm_master master WHERE master.id = masterId)"/>
+        <property name="administrator" type="string"
+                  formula="(select t.userName from iyun_sm_user t where t.id = (SELECT master.assetUser FROM cmdb_asm_master master WHERE master.id = masterId))"/>
+        <property name="type" type="string"
+                  formula="(SELECT clus.type FROM cmdb_storagedevice_clusters clus WHERE clus.id = cid)"/>
+    </class>
+</hibernate-mapping>

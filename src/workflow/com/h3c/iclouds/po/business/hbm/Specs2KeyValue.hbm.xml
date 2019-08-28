@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.business.Specs2KeyValue" table="iyun_product_specs2keyvalue">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="key" update="false">
+            <column name="key" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="value">
+            <column name="value" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="unit" update="false">
+            <column name="unit" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="valueType" update="false">
+            <column name="valuetype" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="minValue">
+            <column name="minvalue" sql-type="int"/>
+        </property>
+        <property name="maxValue">
+            <column name="maxvalue" sql-type="int"/>
+        </property>
+        <property name="step">
+            <column name="step" sql-type="int"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp"/>
+        </property>
+        <property name="keyName" type="string" formula="(SELECT key.keyname FROM iyun_product_specs2key key WHERE key.id = key)"/>
+    </class>
+</hibernate-mapping>

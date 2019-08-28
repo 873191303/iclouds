@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.StorageVolums" table="cmdb_storagedevice_volums">
+        <id name="id" type="string">
+            <column name="id" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="sid" type="string">
+            <column name="sid" length="50"/>
+        </property>
+        <property name="storyType" type="string">
+            <column name="storyType" length="36"/>
+        </property>
+        <property name="volumeName" type="string">
+            <column name="volumeName" length="36"/>
+        </property>
+        <property name="size" type="float">
+            <column name="size" length="24"/>
+        </property>
+        <property name="usedSize" type="float">
+            <column name="usedSize" length="24"/>
+        </property>
+        <property name="raidMethod" type="int">
+            <column name="raidMethod" length="16"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="100"/>
+        </property>
+        <property name="ip" type="string">
+            <column name="ip" length="36"/>
+        </property>
+        <property name="targetName" type="string">
+            <column name="targetName" length="50"/>
+        </property>
+        <property name="wwn" type="string">
+            <column name="wwn" length="100"/>
+        </property>
+        <property name="unit" type="string">
+            <column name="unit" length="50"/>
+        </property>
+        <property name="iqn" type="string">
+            <column name="iqn" length="100"/>
+        </property>
+        <property name="vip" type="string">
+            <column name="vip" length="50"/>
+        </property>
+        <property name="hpId" type="string">
+            <column name="hpid"/>
+        </property>
+        <property name="belongId" type="string">
+            <column name="belonghpid"/>
+        </property>
+        <property name="groupId" type="string">
+            <column name="groupId" length="36"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="createdBy" length="36"/>
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="createdDate" length="19"/>
+        </property>
+        <property name="updatedBy"  type="string">
+            <column name="updatedBy" length="36"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="updatedDate" length="19"/>
+        </property>
+        <property name="targetIp" type="string" formula="(SELECT voho.targetIp FROM cmdb_storage_volume2host voho WHERE voho.volumeId = id)"/>
+    </class>
+</hibernate-mapping>

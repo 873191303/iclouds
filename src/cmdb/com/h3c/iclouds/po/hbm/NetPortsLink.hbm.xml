@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.h3c.iclouds.po.NetPortsLink" table="cmdb_asm_LinkTo">
+		<id name="id" type="string">
+			<column name="id" length="36" />
+			<generator class="uuid.hex" />
+		</id>
+		<property name="trunkTo" type="string">
+			<column name="trunkTo" length="50" />
+		</property>
+		<property name="accessTo" type="string">
+			<column name="accessTo" length="50" />
+		</property>
+		<property name="remark" type="string">
+			<column name="remark" length="600" />
+		</property>
+		<property name="vlan" type="string">
+			<column name="vlan" length="50" />
+		</property>
+		<property name="groupId" type="string">
+			<column name="groupId" length="36" />
+		</property>
+		<property name="createdBy" type="string" update="false">
+			<column name="CreatedBy" length="36" />
+		</property>
+		<property name="createdDate" type="timestamp" update="false">
+			<column name="CreatedDate" length="19" />
+		</property>
+		<property name="updatedBy" type="string">
+			<column name="UpdatedBy" length="36" />
+		</property>
+		<property name="updatedDate" type="timestamp">
+			<column name="UpdatedDate" length="19" />
+		</property>
+		
+		<property name="trunkMasterId" type="string" formula="(select t.masterId from cmdb_asm_netports t where t.id = trunkTo)"/>
+		<property name="accessMasterId" type="string" formula="(select t.masterId from cmdb_asm_netports t where t.id = accessTo)"/>
+
+		<many-to-one name="trunkPort" class="com.h3c.iclouds.po.NetPorts" lazy="no-proxy" insert="false" update="false">
+			<column name="trunkTo"></column>
+		</many-to-one>
+
+		<many-to-one name="accessPort" class="com.h3c.iclouds.po.NetPorts" lazy="no-proxy" insert="false" update="false">
+			<column name="accessTo"></column>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

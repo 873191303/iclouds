@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.Azone" table="iyun_keystone_azone">
+        <id name="uuid" type="string">
+            <column name="uuid" length="128" />
+            <generator class="assigned" />
+        </id>
+        <property name="lableName" type="string">
+            <column name="lableName" length="128"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="128" />
+        </property>
+        <property name="zone" type="string">
+            <column name="zone" length="32"/>
+        </property>
+        <property name="virtType" type="string">
+            <column name="virt_type" length="32"/>
+        </property>
+        <property name="resourceType" type="string">
+            <column name="resource_type" length="32"/>
+        </property>
+        <property name="deleted" type="string">
+            <column name="deleted" length="32"/>
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

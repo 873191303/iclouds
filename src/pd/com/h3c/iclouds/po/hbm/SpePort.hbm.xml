@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.SpePort" table="iyun_spe_networks">
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="hostId">
+            <column name="hostid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="mac">
+            <column name="mac" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="ip">
+            <column name="ip" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="uuid">
+            <column name="uuid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="monitorId">
+            <column name="monitorid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="portId">
+            <column name="portid" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="tenantId">
+            <column name="tenant_id" sql-type="varchar(255)"/>
+        </property>
+        <property name="port" type="integer" >
+            <column name="port" length="36"/>
+        </property>
+        <property name="createdBy">
+            <column name="createdby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="createdDate">
+            <column name="createddate" sql-type="timestamp(6)"/>
+        </property>
+        <property name="updatedBy">
+            <column name="updatedby" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="updatedDate">
+            <column name="updateddate" sql-type="timestamp(6)"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.FirewallGroups" table="cmdb_firewall_groups">
+        <id name="id" type="string">
+            <column name="id" length="36" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="stackName" type="string">
+            <column name="stackName" length="50"/>
+        </property>
+        <property name="stackType" type="string">
+            <column name="stackType" length="50"/>
+        </property>
+        <property name="pstackId" type="string">
+            <column name="pstackId" length="50"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="500"/>
+        </property>
+        
+        <property name="groupId" type="string">
+            <column name="groupId" length="36" />
+        </property>
+        <property name="createdBy" type="string" update="false">
+            <column name="CreatedBy" length="36" />
+        </property>
+        <property name="createdDate" type="timestamp" update="false">
+            <column name="CreatedDate" length="19"/>
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="36" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="19" />
+        </property>
+        
+        <set name="items" lazy="true" cascade="delete" inverse="true">
+			<key column="stackId"></key>
+			<one-to-many class="com.h3c.iclouds.po.FirewallGroups2Items" />
+		</set>
+    </class>
+</hibernate-mapping>

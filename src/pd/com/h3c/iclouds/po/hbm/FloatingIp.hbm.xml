@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.h3c.iclouds.po.FloatingIp" table="iyun_neutron_floatingips">
+        <id name="id" type="java.lang.String">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="tenantId" type="java.lang.String">
+            <column name="tenant_id" length="64"/>
+        </property>
+        <property name="floatingIp" type="java.lang.String">
+            <column name="floating_ip_address" length="64"/>
+        </property>
+        <property name="networkId" type="java.lang.String">
+            <column name="floating_network_id" length="36"/>
+        </property>
+        <property name="floatingPortId" type="java.lang.String">
+            <column name="floating_port_id" length="36"/>
+        </property>
+        <property name="fixedPortId" type="java.lang.String">
+            <column name="fixed_port_id" length="36"/>
+        </property>
+        <property name="fixedIp" type="java.lang.String">
+            <column name="fixed_ip_address" length="64"/>
+        </property>
+        <property name="routerId" type="java.lang.String">
+            <column name="router_id" length="36"/>
+        </property>
+        <property name="lastRouterId" type="java.lang.String">
+            <column name="last_known_router_id" length="36"/>
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="16"/>
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="name" length="128"/>
+        </property>
+        <property name="norm" type="java.lang.String">
+            <column name="norm" length="256"/>
+        </property>
+        <property name="cloudosId" type="java.lang.String">
+            <column name="cloudos_id" length="50"/>
+        </property>
+        <property name="portCdId" type="string"
+                  formula="(SELECT port.cloudos_id FROM iyun_vdc_ports port WHERE port.id = floating_port_id)"/>
+        <property name="portName" type="string"
+                  formula="(SELECT port.name FROM iyun_vdc_ports port WHERE port.id = floating_port_id)"/>
+        <property name="subnetId" type="string"
+                  formula="(SELECT subnet.id FROM iyun_vdc_subnet subnet WHERE subnet.network_id = floating_network_id)"/>
+        <property name="networkName" type="string" formula="(SELECT n.name FROM iyun_vdc_network n WHERE n.id = floating_network_id)"/>
+        <property name="owner" type="string" formula="(SELECT p.owner FROM iyun_vdc_ports p WHERE p.id = floating_port_id)"/>
+        <property name="ownerName" type="string"
+                  formula="(SELECT u.loginname from iyun_sm_user u where u.id = (SELECT p.owner FROM iyun_vdc_ports p WHERE p.id = floating_port_id))"/>
+        <property name="projectName" type="string" formula="(select t.name from iyun_keystone_project t where t.id = tenant_id)"/>
+    </class>
+</hibernate-mapping>

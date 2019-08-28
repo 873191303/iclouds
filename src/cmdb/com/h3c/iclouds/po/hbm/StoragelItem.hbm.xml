@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.h3c.iclouds.po.StorageItem" table="cmdb_storage_items" >
+        <id name="id">
+            <column name="id" sql-type="varchar(36)" length="36"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="uuid">
+            <column name="uuid" sql-type="varchar(36)"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar(50)"/>
+        </property>
+        <property name="itemType">
+            <column name="itemtype" sql-type="varchar(36)" length="36"/>
+        </property>
+        <property name="option">
+            <column name="option" sql-type="varchar(255)"/>
+        </property>
+    </class>
+</hibernate-mapping>
